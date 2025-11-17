@@ -70,9 +70,40 @@ Tu pourras alors :
 - Vibration différente
 - Se ferme après un certain temps
 
+## 📱 Notifications sur Mobile Chrome
+
+### ⚠️ Important : Installation PWA requise
+
+Sur **Chrome mobile**, les notifications fonctionnent mieux lorsque l'app est installée comme PWA :
+
+1. **Sur Android Chrome** :
+   - Ouvre l'app sur https://antoinesinety.github.io/baby-track/
+   - Un bandeau "Installer l'application" apparaîtra automatiquement
+   - OU Menu (⋮) → "Ajouter à l'écran d'accueil" / "Installer l'application"
+   - L'icône Baby Track apparaîtra sur ton écran d'accueil
+
+2. **Ouvrir depuis la PWA** :
+   - Lance l'app depuis l'icône sur ton écran d'accueil
+   - Les notifications fonctionneront correctement
+   - L'app utilisera le Service Worker pour les notifications
+
+3. **Autoriser les notifications** :
+   - Paramètres → Test des Notifications
+   - Clique "Demander la permission"
+   - Accepte la popup de permission
+
+### Différences Desktop vs Mobile
+
+| Fonctionnalité | Desktop | Mobile Chrome (PWA) |
+|----------------|---------|---------------------|
+| Notifications Web API | ✅ Direct | ⚠️ Limité |
+| Service Worker Notifications | ✅ Supporté | ✅ Recommandé |
+| Vibration | ❌ Non | ✅ Oui |
+| Installation PWA | 🔵 Optionnel | 🟢 Recommandé |
+
 ## 📱 Test sur Mobile
 
-### Méthode 1 : Via le réseau local
+### Méthode 1 : Via le réseau local (développement)
 
 1. **Lance le serveur en mode host** :
    ```bash

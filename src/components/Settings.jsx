@@ -3,6 +3,7 @@ import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
 import InviteLink from './InviteLink';
 import NotificationTest from './NotificationTest';
+import InstallPWA from './InstallPWA';
 import './Settings.css';
 
 const Settings = ({ onLogout }) => {
@@ -48,6 +49,8 @@ const Settings = ({ onLogout }) => {
 
   return (
     <div className="settings">
+      <InstallPWA />
+
       <div className="settings-section">
         <h3>👤 Profil</h3>
         <div className="profile-info">

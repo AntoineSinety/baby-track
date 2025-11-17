@@ -4,6 +4,16 @@ import './NotificationTest.css';
 const NotificationTest = () => {
   const [permission, setPermission] = useState(Notification.permission);
   const [testResult, setTestResult] = useState('');
+  const [isServiceWorkerReady, setIsServiceWorkerReady] = useState(false);
+
+  // Vérifier si le Service Worker est prêt
+  React.useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(() => {
+        setIsServiceWorkerReady(true);
+      });
+    }
+  }, []);
 
   const requestPermission = async () => {
     try {
@@ -11,98 +21,133 @@ const NotificationTest = () => {
       setPermission(result);
       if (result === 'granted') {
         setTestResult('✅ Permission accordée !');
+      } else if (result === 'denied') {
+        setTestResult('❌ Permission refusée. Sur mobile, vous devez peut-être installer l\'app comme PWA.');
       } else {
-        setTestResult('❌ Permission refusée');
+        setTestResult('⚠️ Permission non déterminée');
       }
     } catch (error) {
       setTestResult(`❌ Erreur: ${error.message}`);
     }
   };
 
-  const sendTestNotification = () => {
+  const sendTestNotification = async () => {
     if (permission !== 'granted') {
       setTestResult('❌ Vous devez d\'abord autoriser les notifications');
       return;
     }
 
     try {
-      const notification = new Notification('🍼 Test d\'allaitement', {
-        body: 'Ceci est une notification de test !',
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png',
-        tag: 'test-notification',
-        requireInteraction: false,
-        timestamp: Date.now()
-      });
+      // Utiliser le Service Worker si disponible (meilleur support mobile)
+      if (isServiceWorkerReady && 'serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification('🍼 Test d\'allaitement', {
+          body: 'Ceci est une notification de test !',
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">👶</text></svg>',
+          badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">🍼</text></svg>',
+          tag: 'test-notification',
+          requireInteraction: false,
+          timestamp: Date.now(),
+          data: { url: window.location.href }
+        });
+        setTestResult('✅ Notification envoyée via Service Worker !');
+      } else {
+        // Fallback pour desktop
+        const notification = new Notification('🍼 Test d\'allaitement', {
+          body: 'Ceci est une notification de test !',
+          tag: 'test-notification',
+          requireInteraction: false,
+          timestamp: Date.now()
+        });
 
-      notification.onclick = () => {
-        window.focus();
-        notification.close();
-      };
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
 
-      setTestResult('✅ Notification envoyée !');
-
-      // Fermer automatiquement après 5 secondes
-      setTimeout(() => notification.close(), 5000);
+        setTestResult('✅ Notification envoyée !');
+        setTimeout(() => notification.close(), 5000);
+      }
     } catch (error) {
       setTestResult(`❌ Erreur: ${error.message}`);
     }
   };
 
-  const sendFeedingReminder = () => {
+  const sendFeedingReminder = async () => {
     if (permission !== 'granted') {
       setTestResult('❌ Vous devez d\'abord autoriser les notifications');
       return;
     }
 
     try {
-      const notification = new Notification('⏰ Rappel d\'allaitement', {
-        body: 'Il est temps de nourrir bébé ! Dernier allaitement il y a 4 heures.',
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png',
-        tag: 'feeding-reminder',
-        requireInteraction: true,
-        vibrate: [200, 100, 200],
-        timestamp: Date.now(),
-        actions: [
-          { action: 'open', title: 'Ouvrir l\'app' },
-          { action: 'dismiss', title: 'Plus tard' }
-        ]
-      });
+      if (isServiceWorkerReady && 'serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification('⏰ Rappel d\'allaitement', {
+          body: 'Il est temps de nourrir bébé ! Dernier allaitement il y a 4 heures.',
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">👶</text></svg>',
+          badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">🍼</text></svg>',
+          tag: 'feeding-reminder',
+          requireInteraction: true,
+          vibrate: [200, 100, 200],
+          timestamp: Date.now(),
+          data: { url: window.location.href }
+        });
+        setTestResult('✅ Rappel d\'allaitement envoyé via Service Worker !');
+      } else {
+        const notification = new Notification('⏰ Rappel d\'allaitement', {
+          body: 'Il est temps de nourrir bébé ! Dernier allaitement il y a 4 heures.',
+          tag: 'feeding-reminder',
+          requireInteraction: true,
+          vibrate: [200, 100, 200],
+          timestamp: Date.now()
+        });
 
-      notification.onclick = () => {
-        window.focus();
-        notification.close();
-      };
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
 
-      setTestResult('✅ Rappel d\'allaitement envoyé !');
+        setTestResult('✅ Rappel d\'allaitement envoyé !');
+      }
     } catch (error) {
       setTestResult(`❌ Erreur: ${error.message}`);
     }
   };
 
-  const sendDiaperReminder = () => {
+  const sendDiaperReminder = async () => {
     if (permission !== 'granted') {
       setTestResult('❌ Vous devez d\'abord autoriser les notifications');
       return;
     }
 
     try {
-      const notification = new Notification('💩 Changement de couche', {
-        body: 'N\'oubliez pas de changer la couche de bébé !',
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png',
-        tag: 'diaper-reminder',
-        vibrate: [100, 50, 100],
-        timestamp: Date.now()
-      });
+      if (isServiceWorkerReady && 'serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification('💩 Changement de couche', {
+          body: 'N\'oubliez pas de changer la couche de bébé !',
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">👶</text></svg>',
+          badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">💩</text></svg>',
+          tag: 'diaper-reminder',
+          vibrate: [100, 50, 100],
+          timestamp: Date.now(),
+          data: { url: window.location.href }
+        });
+        setTestResult('✅ Rappel de couche envoyé via Service Worker !');
+      } else {
+        const notification = new Notification('💩 Changement de couche', {
+          body: 'N\'oubliez pas de changer la couche de bébé !',
+          tag: 'diaper-reminder',
+          vibrate: [100, 50, 100],
+          timestamp: Date.now()
+        });
 
-      notification.onclick = () => {
-        window.focus();
-        notification.close();
-      };
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
 
-      setTestResult('✅ Rappel de couche envoyé !');
+        setTestResult('✅ Rappel de couche envoyé !');
+      }
     } catch (error) {
       setTestResult(`❌ Erreur: ${error.message}`);
     }
@@ -211,10 +256,14 @@ const NotificationTest = () => {
           </li>
           <li>
             <strong>Service Worker :</strong>{' '}
-            {('serviceWorker' in navigator) ? '✅ Disponible' : '❌ Non disponible'}
+            {('serviceWorker' in navigator) ? (isServiceWorkerReady ? '✅ Prêt' : '⏳ Chargement...') : '❌ Non disponible'}
           </li>
           <li>
             <strong>Permission actuelle :</strong> {permission}
+          </li>
+          <li>
+            <strong>PWA installée :</strong>{' '}
+            {window.matchMedia('(display-mode: standalone)').matches ? '✅ Oui' : '❌ Non (ouvrez depuis l\'écran d\'accueil)'}
           </li>
         </ul>
       </div>
@@ -227,6 +276,24 @@ const NotificationTest = () => {
           <li>Vérifiez que vous recevez bien les notifications</li>
           <li>Sur mobile : vérifiez que l'app vibre</li>
         </ol>
+
+        {!window.matchMedia('(display-mode: standalone)').matches && (
+          <div className="mobile-tip" style={{
+            background: '#fef3c7',
+            border: '2px solid #f59e0b',
+            borderRadius: '8px',
+            padding: '12px',
+            marginTop: '12px'
+          }}>
+            <strong>💡 Sur mobile Chrome :</strong>
+            <ol style={{ marginTop: '8px', paddingLeft: '20px' }}>
+              <li>Ouvrez le menu (⋮)</li>
+              <li>Sélectionnez "Ajouter à l'écran d'accueil" ou "Installer l'application"</li>
+              <li>Ouvrez l'app depuis l'icône sur votre écran d'accueil</li>
+              <li>Les notifications fonctionneront mieux depuis la PWA installée</li>
+            </ol>
+          </div>
+        )}
       </div>
     </div>
   );
