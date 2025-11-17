@@ -1,0 +1,128 @@
+/* Variables pour le thème sombre */
+:root[data-theme="dark"] {
+  --bg-primary: #0f0f23;
+  --bg-secondary: #1a1a2e;
+  --bg-hover: #252541;
+  --card-bg: #16213e;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0b0;
+  --border-color: #2a2a40;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --gradient-start: #1a1a2e;
+  --gradient-end: #16213e;
+}
+
+/* Variables pour le thème clair */
+:root[data-theme="light"] {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --bg-hover: #e5e7eb;
+  --card-bg: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --gradient-start: #e0e7ff;
+  --gradient-end: #dbeafe;
+}
+
+/* Thème par défaut (sombre) */
+:root {
+  --bg-primary: #0f0f23;
+  --bg-secondary: #1a1a2e;
+  --bg-hover: #252541;
+  --card-bg: #16213e;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0b0;
+  --border-color: #2a2a40;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --gradient-start: #1a1a2e;
+  --gradient-end: #16213e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Boutons par défaut */
+button {
+  font-family: inherit;
+}
+
+/* Inputs par défaut */
+input,
+textarea {
+  font-family: inherit;
+}
+
+/* Animations globales */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Règles pour les données utilisateur
+    match /users/{userId} {
+      // L'utilisateur peut lire et écrire uniquement ses propres données
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Tous les sous-documents (settings, events, etc.)
+      match /{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}

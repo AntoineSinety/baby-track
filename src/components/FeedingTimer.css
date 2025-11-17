@@ -1,0 +1,138 @@
+.feeding-timer {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.feeding-timer.warning {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
+
+.feeding-timer.overdue {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(239, 68, 68, 0.05) 100%);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(239, 68, 68, 0.4);
+  }
+}
+
+.timer-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.timer-header h2 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.last-feeding-info {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.time-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  background: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  min-width: 80px;
+  text-align: center;
+  border: 2px solid var(--border-color);
+}
+
+.time-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.time-separator {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.overdue-icon {
+  font-size: 5rem;
+  animation: shake 1s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.no-feeding-message {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.no-feeding-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-feeding-message p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .feeding-timer {
+    padding: 1.5rem;
+  }
+
+  .timer-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .time-value {
+    font-size: 2rem;
+    padding: 0.75rem 1rem;
+    min-width: 60px;
+  }
+
+  .time-separator {
+    font-size: 2rem;
+  }
+
+  .time-label {
+    font-size: 0.75rem;
+  }
+}
