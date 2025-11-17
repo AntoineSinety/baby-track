@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
+import { useBaby } from '../context/BabyContext';
 import { subscribeToEvents, addEvent, updateEvent } from '../firebase/firestore';
 import { logout } from '../firebase/auth';
 import { useNotifications } from '../hooks/useNotifications';
@@ -15,11 +16,13 @@ import Statistics from './Statistics';
 import FunFeatures from './FunFeatures';
 import Settings from './Settings';
 import EventModal from './EventModal';
+import BabySetup from './BabySetup';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { settings } = useSettings();
+  const { activeBaby, loading: babyLoading } = useBaby();
   const [events, setEvents] = useState([]);
   const [activeView, setActiveView] = useState('home');
   const [loading, setLoading] = useState(true);
@@ -29,18 +32,23 @@ const Dashboard = () => {
   useNotifications();
 
   useEffect(() => {
-    if (user) {
-      const unsubscribe = subscribeToEvents(user.uid, (eventsData) => {
+    if (activeBaby) {
+      const unsubscribe = subscribeToEvents(activeBaby.id, (eventsData) => {
         setEvents(eventsData);
         setLoading(false);
       });
 
       return () => unsubscribe();
     }
-  }, [user]);
+  }, [activeBaby]);
 
   const handleAddEvent = async (eventData) => {
     try {
+      if (!activeBaby) {
+        alert('Aucun bébé sélectionné');
+        return;
+      }
+
       // Créer une date personnalisée si customTime est fourni
       let customDate = new Date();
       if (eventData.customTime) {
@@ -57,7 +65,11 @@ const Dashboard = () => {
       // Retirer customTime des données sauvegardées
       delete eventToSave.customTime;
 
-      await addEvent(user.uid, eventToSave);
+      // Ajouter l'événement avec les infos de l'utilisateur
+      await addEvent(activeBaby.id, eventToSave, {
+        userId: user.uid,
+        displayName: user.displayName || user.email
+      });
     } catch (error) {
       console.error('Erreur lors de l\'ajout de l\'événement:', error);
       alert('Erreur lors de l\'ajout de l\'événement');
@@ -70,6 +82,11 @@ const Dashboard = () => {
 
   const handleUpdateEvent = async (eventData) => {
     try {
+      if (!activeBaby) {
+        alert('Aucun bébé sélectionné');
+        return;
+      }
+
       // Gérer le changement d'heure si customTime est fourni
       let updatedData = { ...eventData };
 
@@ -84,7 +101,7 @@ const Dashboard = () => {
       // Retirer customTime des données sauvegardées
       delete updatedData.customTime;
 
-      await updateEvent(user.uid, editingEvent.id, updatedData);
+      await updateEvent(activeBaby.id, editingEvent.id, updatedData);
       setEditingEvent(null);
     } catch (error) {
       console.error('Erreur lors de la mise à jour de l\'événement:', error);
@@ -122,14 +139,13 @@ const Dashboard = () => {
             <div className="section-title">Timeline du jour</div>
             <EventTimeline
               events={events}
-              userId={user.uid}
               limit={10}
               onEditEvent={handleEditEvent}
             />
           </>
         );
       case 'history':
-        return <EventHistory events={events} userId={user.uid} showAll onEditEvent={handleEditEvent} />;
+        return <EventHistory events={events} showAll onEditEvent={handleEditEvent} />;
       case 'statistics':
         return <Statistics events={events} />;
       case 'fun':
@@ -141,11 +157,27 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) {
+  // Afficher le chargement pendant la récupération des bébés
+  if (babyLoading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Chargement...</p>
+      </div>
+    );
+  }
+
+  // Afficher l'écran de configuration si aucun bébé
+  if (!activeBaby) {
+    return <BabySetup />;
+  }
+
+  // Afficher le chargement des événements
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Chargement des événements...</p>
       </div>
     );
   }

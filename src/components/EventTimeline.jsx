@@ -1,16 +1,20 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useBaby } from '../context/BabyContext';
 import { deleteEvent } from '../firebase/firestore';
 import './EventTimeline.css';
 
-const EventTimeline = ({ events, userId, limit, onEditEvent }) => {
+const EventTimeline = ({ events, limit, onEditEvent }) => {
+  const { activeBaby } = useBaby();
   const displayedEvents = limit ? events.slice(0, limit) : events;
 
   const handleDelete = async (eventId) => {
+    if (!activeBaby) return;
+
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) {
       try {
-        await deleteEvent(userId, eventId);
+        await deleteEvent(activeBaby.id, eventId);
       } catch (error) {
         console.error('Erreur lors de la suppression:', error);
         alert('Erreur lors de la suppression de l\'événement');

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
+import InviteLink from './InviteLink';
 import './Settings.css';
 
 const Settings = ({ onLogout }) => {
@@ -87,6 +88,10 @@ const Settings = ({ onLogout }) => {
         >
           {saving ? 'Sauvegarde...' : 'Sauvegarder'}
         </button>
+      </div>
+
+      <div className="settings-section">
+        <InviteLink />
       </div>
 
       <div className="settings-section">

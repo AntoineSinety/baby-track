@@ -39,6 +39,7 @@ export const createBaby = async (userId, userEmail, displayName, babyData) => {
     const docRef = await addDoc(babiesRef, {
       ...babyData,
       createdBy: userId,
+      memberIds: [userId], // Liste simple des IDs pour les requêtes
       members: [{
         userId,
         email: userEmail,
@@ -59,22 +60,14 @@ export const createBaby = async (userId, userEmail, displayName, babyData) => {
 export const getUserBabies = async (userId) => {
   try {
     const babiesRef = collection(db, 'babies');
-    const q = query(babiesRef, where('members', 'array-contains-any', [
-      { userId, role: 'owner' },
-      { userId, role: 'editor' }
-    ]));
+    // Utiliser memberIds pour la requête (array-contains fonctionne avec des valeurs simples)
+    const q = query(babiesRef, where('memberIds', 'array-contains', userId));
 
-    // Note: Firestore ne peut pas faire de recherche array-contains-any avec des objets
-    // On doit récupérer tous les bébés et filtrer côté client
-    const allBabiesSnapshot = await getDocs(babiesRef);
+    const snapshot = await getDocs(q);
     const babies = [];
 
-    allBabiesSnapshot.forEach((doc) => {
-      const data = doc.data();
-      const isMember = data.members?.some(member => member.userId === userId);
-      if (isMember) {
-        babies.push({ id: doc.id, ...data });
-      }
+    snapshot.forEach((doc) => {
+      babies.push({ id: doc.id, ...doc.data() });
     });
 
     return babies;
@@ -119,6 +112,7 @@ export const addMemberToBaby = async (babyId, memberData) => {
   try {
     const babyRef = doc(db, 'babies', babyId);
     await updateDoc(babyRef, {
+      memberIds: arrayUnion(memberData.userId), // Ajouter l'ID à la liste simple
       members: arrayUnion(memberData),
       updatedAt: serverTimestamp()
     });
@@ -133,6 +127,7 @@ export const removeMemberFromBaby = async (babyId, memberData) => {
   try {
     const babyRef = doc(db, 'babies', babyId);
     await updateDoc(babyRef, {
+      memberIds: arrayRemove(memberData.userId), // Retirer l'ID de la liste simple
       members: arrayRemove(memberData),
       updatedAt: serverTimestamp()
     });

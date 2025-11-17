@@ -105,9 +105,9 @@ export const deleteEvent = async (babyId, eventId) => {
 };
 
 // Récupérer les événements par type et période
-export const getEventsByTypeAndPeriod = async (userId, type, startDate, endDate) => {
+export const getEventsByTypeAndPeriod = async (babyId, type, startDate, endDate) => {
   try {
-    const eventsRef = collection(db, 'users', userId, 'events');
+    const eventsRef = collection(db, 'babies', babyId, 'events');
     let q = query(eventsRef, orderBy('createdAt', 'desc'));
 
     if (type) {

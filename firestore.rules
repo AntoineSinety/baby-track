@@ -2,15 +2,46 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Règles pour les données utilisateur
-    match /users/{userId} {
-      // L'utilisateur peut lire et écrire uniquement ses propres données
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    // Fonction pour vérifier si l'utilisateur est membre du bébé
+    // Utilise memberIds qui est un tableau simple de strings
+    function isUserMember(memberIds) {
+      return request.auth != null &&
+             request.auth.uid in memberIds;
+    }
 
-      // Tous les sous-documents (settings, events, etc.)
-      match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+    // Règles pour les bébés
+    match /babies/{babyId} {
+      // Lecture : tout utilisateur authentifié peut lire (pour voir l'invitation)
+      allow read: if request.auth != null;
+
+      // Création : utilisateur authentifié peut créer un bébé
+      allow create: if request.auth != null &&
+                      request.resource.data.createdBy == request.auth.uid &&
+                      isUserMember(request.resource.data.memberIds);
+
+      // Mise à jour : si l'utilisateur est membre OU s'il s'ajoute comme membre
+      allow update: if request.auth != null && (
+                      isUserMember(resource.data.memberIds) ||
+                      // Permettre d'ajouter son propre userId aux memberIds (accepter invitation)
+                      (!isUserMember(resource.data.memberIds) &&
+                       isUserMember(request.resource.data.memberIds))
+                    );
+
+      // Suppression : seulement le créateur
+      allow delete: if request.auth != null &&
+                      resource.data.createdBy == request.auth.uid;
+
+      // Événements du bébé
+      match /events/{eventId} {
+        // Les membres du bébé parent peuvent gérer les événements
+        allow read, write: if request.auth != null &&
+                             isUserMember(get(/databases/$(database)/documents/babies/$(babyId)).data.memberIds);
       }
+    }
+
+    // Règles pour les paramètres utilisateur (restent par utilisateur)
+    match /users/{userId}/settings/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
 }

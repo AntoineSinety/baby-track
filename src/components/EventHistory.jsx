@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useBaby } from '../context/BabyContext';
 import { deleteEvent } from '../firebase/firestore';
 import './EventHistory.css';
 
-const EventHistory = ({ events, userId, showAll = false, onEditEvent }) => {
+const EventHistory = ({ events, showAll = false, onEditEvent }) => {
+  const { activeBaby } = useBaby();
   const [filter, setFilter] = useState('all');
 
   const filteredEvents = events.filter(event => {
@@ -13,9 +15,11 @@ const EventHistory = ({ events, userId, showAll = false, onEditEvent }) => {
   });
 
   const handleDelete = async (eventId) => {
+    if (!activeBaby) return;
+
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) {
       try {
-        await deleteEvent(userId, eventId);
+        await deleteEvent(activeBaby.id, eventId);
       } catch (error) {
         console.error('Erreur lors de la suppression:', error);
         alert('Erreur lors de la suppression de l\'événement');
