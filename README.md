@@ -1,217 +1,164 @@
 # 👶 Baby Track
 
-Application PWA (Progressive Web App) pour suivre l'allaitement et les changements de couches de votre bébé, avec synchronisation en temps réel entre plusieurs appareils.
+Application PWA de suivi d'allaitement et de couches pour bébé avec **partage en temps réel** entre parents.
 
-## ✨ Fonctionnalités
-
-- 🍼 **Suivi des allaitements** avec timer countdown
-- 👶 **Suivi des changements de couches** (pipi, caca, ou les deux)
-- ⏰ **Rappels automatiques** pour le prochain allaitement
-- 📊 **Statistiques** détaillées (jour, semaine, total)
-- 📱 **Synchronisation en temps réel** entre appareils
-- 🔔 **Notifications push** pour les rappels
-- 🌓 **Thème sombre/clair**
-- 📝 **Notes** pour chaque événement
-- 📖 **Historique complet** avec filtres
-- 🔐 **Authentification sécurisée** avec Google
-- 📴 **Fonctionne hors ligne** (PWA)
-
-## 🚀 Installation
-
-### Prérequis
-
-- Node.js 18+ installé
-- Compte Firebase (gratuit)
-
-### Étapes d'installation
-
-1. **Installer les dépendances**
+## 🚀 Démarrage rapide
 
 ```bash
 npm install
-```
-
-2. **Configurer Firebase**
-
-   a. Créez un projet Firebase sur [https://console.firebase.google.com](https://console.firebase.google.com)
-
-   b. Activez l'authentification Google :
-      - Firebase Console → Authentication → Sign-in method
-      - Activez "Google"
-
-   c. Créez une base de données Firestore :
-      - Firebase Console → Firestore Database → Create database
-      - Choisissez "Production mode"
-
-   d. Configurez les règles Firestore (Security rules) :
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-  }
-}
-```
-
-   e. Activez Firebase Cloud Messaging (optionnel, pour les notifications) :
-      - Firebase Console → Project Settings → Cloud Messaging
-      - Générez une clé Web push
-
-3. **Configurer les variables d'environnement**
-
-   a. Copiez le fichier `.env.example` en `.env`
-
-   b. Récupérez vos identifiants Firebase :
-      - Firebase Console → Project Settings → General
-      - Dans "Your apps", sélectionnez votre app web
-      - Copiez les valeurs de configuration
-
-   c. Remplissez le fichier `.env` :
-
-```env
-VITE_FIREBASE_API_KEY=votre_api_key
-VITE_FIREBASE_AUTH_DOMAIN=votre_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=votre_project_id
-VITE_FIREBASE_STORAGE_BUCKET=votre_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=votre_sender_id
-VITE_FIREBASE_APP_ID=votre_app_id
-```
-
-   d. Mettez à jour les fichiers suivants avec votre configuration :
-      - `src/firebase/config.js`
-      - `public/firebase-messaging-sw.js`
-
-4. **Lancer l'application en mode développement**
-
-```bash
 npm run dev
 ```
 
-L'application sera accessible sur [http://localhost:5173](http://localhost:5173)
+Ouvre : **http://localhost:5173**
 
-## 📦 Build & Déploiement
+1. **Connecte-toi** avec Google
+2. **Crée le profil du bébé** (nom + date de naissance)
+3. **Commence à tracker** ! 🎉
 
-### Build de production
+## ✨ Fonctionnalités principales
+
+### Suivi complet
+- 🍼 **Allaitement** : durée, sein gauche/droit, heure personnalisée
+- 💩 **Couches** : pipi, caca, ou les deux
+- ⏰ **Timer de rappel** pour le prochain allaitement
+- 📝 **Notes** sur chaque événement
+- ✏️ **Modification** des événements passés
+
+### Partage ultra-simple
+- 👥 **Lien d'invitation** : partage en 1 clic
+- 🔄 **Sync temps réel** entre tous les appareils
+- 👤 Voir **qui a ajouté quoi**
+
+### Visualisation
+- 📊 **Graphiques** sur 7 jours
+- 📅 **Résumé quotidien**
+- ⏱️ **Timeline visuelle** avec heures
+- 📜 **Historique complet**
+
+### Bonus
+- 🎮 **Mode Papa/Maman** avec compteurs fun
+- 🏆 **Badges** de réussite
+- 📱 **PWA** : installe comme une app
+- 🌙 **Mode sombre/clair**
+- 🔔 **Notifications push**
+
+## 👥 Partager avec ta femme
+
+1. Va dans **Paramètres** ⚙️
+2. Section **"Partager avec votre partenaire"**
+3. **Copie le lien** ou clique **Partager**
+4. Envoie-le par WhatsApp/SMS
+5. Elle clique, se connecte, accepte → ✅ **C'est fait !**
+
+## 📱 Tester sur mobile
 
 ```bash
-npm run build
+npm run dev:host
 ```
 
-Les fichiers de production seront dans le dossier `dist/`
+Affiche :
+```
+➜  Network: http://192.168.1.X:5173/
+```
 
-### Déploiement sur Firebase Hosting
+Sur ton téléphone (même WiFi) : ouvre cette adresse !
 
-1. Installez Firebase CLI :
+## 🔔 Test des notifications
+
+1. **Paramètres** ⚙️ → "Test des Notifications"
+2. **Demander la permission**
+3. Teste : notification simple, rappel allaitement, rappel couche
+
+## ⚙️ Configuration Firebase
+
+### 1. Créer `.env`
+
+```env
+VITE_FIREBASE_API_KEY=ta-clé
+VITE_FIREBASE_AUTH_DOMAIN=ton-projet.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=ton-projet-id
+VITE_FIREBASE_STORAGE_BUCKET=ton-projet.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=1:123:web:abc
+VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+### 2. Déployer les règles Firestore
 
 ```bash
 npm install -g firebase-tools
-```
-
-2. Connectez-vous à Firebase :
-
-```bash
 firebase login
+firebase deploy --only firestore:rules
 ```
 
-3. Initialisez Firebase Hosting :
+## 🛠️ Commandes
 
-```bash
-firebase init hosting
-```
+| Commande | Description |
+|----------|-------------|
+| `npm run dev` | Dev local uniquement |
+| `npm run dev:host` | Dev + réseau (mobile) |
+| `npm run build` | Build production |
+| `npm run preview` | Preview du build |
 
-4. Déployez :
-
-```bash
-npm run build
-firebase deploy
-```
-
-## 🎨 Personnalisation
-
-### Modifier l'intervalle par défaut
-
-Dans `src/context/SettingsContext.jsx`, ligne 12 :
-
-```javascript
-feedingInterval: 4, // Changez cette valeur (en heures)
-```
-
-### Modifier le thème par défaut
-
-Dans `src/context/SettingsContext.jsx`, ligne 13 :
-
-```javascript
-theme: 'dark', // ou 'light'
-```
-
-### Personnaliser les couleurs
-
-Modifiez les variables CSS dans `src/index.css`
-
-## 📱 Installation PWA
-
-### Sur mobile (Android/iOS)
-
-1. Ouvrez l'application dans votre navigateur
-2. Appuyez sur le menu du navigateur
-3. Sélectionnez "Ajouter à l'écran d'accueil"
-4. L'application s'installera comme une app native
-
-### Sur desktop (Chrome/Edge)
-
-1. Ouvrez l'application
-2. Cliquez sur l'icône d'installation dans la barre d'adresse
-3. Confirmez l'installation
-
-## 🔐 Sécurité
-
-- Les données sont chiffrées en transit (HTTPS)
-- Authentification sécurisée via Firebase Auth
-- Règles Firestore pour protéger les données utilisateur
-- Chaque utilisateur accède uniquement à ses propres données
-
-## 🤝 Synchronisation multi-appareils
-
-1. Connectez-vous avec le même compte Google sur plusieurs appareils
-2. Les données se synchroniseront automatiquement en temps réel
-3. Les deux parents peuvent utiliser l'app simultanément
-
-## 📊 Structure de données Firestore
+## 📂 Structure importante
 
 ```
-users/
-  {userId}/
-    settings/
-      preferences/
-        - feedingInterval: number
-        - theme: string
-        - notificationsEnabled: boolean
-    events/
-      {eventId}/
-        - type: 'feeding' | 'diaper'
-        - diaperType: 'pee' | 'poop' | 'both' (si type = diaper)
-        - notes: string
-        - createdAt: string
-        - timestamp: serverTimestamp
+src/
+├── components/
+│   ├── Dashboard.jsx          # Page principale
+│   ├── BabySetup.jsx          # Création profil bébé
+│   ├── InviteLink.jsx         # Lien de partage
+│   ├── InviteAccept.jsx       # Acceptation invitation
+│   ├── EventModal.jsx         # Ajout/édition événement
+│   └── NotificationTest.jsx   # Test notifications
+├── firebase/
+│   ├── config.js              # Config Firebase
+│   ├── firestore.js           # Fonctions Firestore
+│   └── babies.js              # Gestion bébés partagés
+└── context/
+    ├── AuthContext.jsx
+    ├── BabyContext.jsx
+    └── SettingsContext.jsx
 ```
 
-## 🛠️ Technologies utilisées
+## 🔐 Sécurité Firestore
 
-- **React** - Framework UI
-- **Vite** - Build tool
-- **Firebase Auth** - Authentification
-- **Firestore** - Base de données temps réel
-- **Firebase Cloud Messaging** - Notifications push
-- **date-fns** - Manipulation des dates
-- **PWA** - Progressive Web App
+Les règles permettent :
+- ✅ Lecture publique des profils bébés (pour invitations)
+- ✅ Auto-ajout comme membre en acceptant
+- ✅ Seuls les membres voient/modifient les événements
 
-## 📝 Licence
+Structure multi-utilisateurs :
+```
+/babies/{babyId}
+  - name: "Prénom"
+  - birthDate: "2025-01-01"
+  - memberIds: ["user1", "user2"]
+  - members: [
+      { userId, email, displayName, role }
+    ]
+  - /events/{eventId}
+      - type: "feeding" | "diaper"
+      - addedBy: { userId, displayName }
+```
 
-MIT
+## 🎯 Plus de détails
 
-## 💡 Support
+Pour un guide complet, voir :
+- **[NOTIFICATIONS_GUIDE.md](NOTIFICATIONS_GUIDE.md)** - Guide notifications
 
-Pour toute question ou problème, créez une issue sur GitHub.
+## 🛠️ Technologies
+
+- React 18.3 + Vite 6
+- Firebase 11 (Auth + Firestore)
+- Chart.js pour graphiques
+- date-fns pour les dates
+- Vite PWA
+
+## 📝 Version
+
+**v1.0.0** - Application complète avec partage multi-utilisateurs
+
+---
+
+Made with ❤️ for tracking baby moments
