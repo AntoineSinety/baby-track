@@ -79,14 +79,21 @@ https://TON-USERNAME.github.io/baby-track/
 
 Remplace `TON-USERNAME` par ton nom d'utilisateur GitHub.
 
-## 🔧 Configuration Firebase (important)
+## 🔧 Configuration Firebase (OBLIGATOIRE)
 
-### Ajouter le domaine GitHub Pages
+### ⚠️ Ajouter le domaine GitHub Pages
+
+**IMPORTANT** : Sans cette étape, l'authentification Google ne fonctionnera pas !
 
 1. Va dans [Firebase Console](https://console.firebase.google.com)
-2. **Authentication** → **Settings** → **Authorized domains**
-3. Ajoute : `TON-USERNAME.github.io`
-4. Sauvegarde
+2. Sélectionne ton projet
+3. **Authentication** → **Settings** → **Authorized domains**
+4. Clique sur **"Add domain"**
+5. Ajoute : `antoinesinety.github.io` (remplace par ton username GitHub)
+6. Clique sur **"Add"**
+7. Vérifie que le domaine apparaît dans la liste
+
+**L'erreur `auth/unauthorized-domain` signifie que cette étape n'a pas été faite.**
 
 ### Mettre à jour les règles CORS (si nécessaire)
 
