@@ -1,0 +1,235 @@
+import React, { useState } from 'react';
+import './NotificationTest.css';
+
+const NotificationTest = () => {
+  const [permission, setPermission] = useState(Notification.permission);
+  const [testResult, setTestResult] = useState('');
+
+  const requestPermission = async () => {
+    try {
+      const result = await Notification.requestPermission();
+      setPermission(result);
+      if (result === 'granted') {
+        setTestResult('✅ Permission accordée !');
+      } else {
+        setTestResult('❌ Permission refusée');
+      }
+    } catch (error) {
+      setTestResult(`❌ Erreur: ${error.message}`);
+    }
+  };
+
+  const sendTestNotification = () => {
+    if (permission !== 'granted') {
+      setTestResult('❌ Vous devez d\'abord autoriser les notifications');
+      return;
+    }
+
+    try {
+      const notification = new Notification('🍼 Test d\'allaitement', {
+        body: 'Ceci est une notification de test !',
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: 'test-notification',
+        requireInteraction: false,
+        timestamp: Date.now()
+      });
+
+      notification.onclick = () => {
+        window.focus();
+        notification.close();
+      };
+
+      setTestResult('✅ Notification envoyée !');
+
+      // Fermer automatiquement après 5 secondes
+      setTimeout(() => notification.close(), 5000);
+    } catch (error) {
+      setTestResult(`❌ Erreur: ${error.message}`);
+    }
+  };
+
+  const sendFeedingReminder = () => {
+    if (permission !== 'granted') {
+      setTestResult('❌ Vous devez d\'abord autoriser les notifications');
+      return;
+    }
+
+    try {
+      const notification = new Notification('⏰ Rappel d\'allaitement', {
+        body: 'Il est temps de nourrir bébé ! Dernier allaitement il y a 4 heures.',
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: 'feeding-reminder',
+        requireInteraction: true,
+        vibrate: [200, 100, 200],
+        timestamp: Date.now(),
+        actions: [
+          { action: 'open', title: 'Ouvrir l\'app' },
+          { action: 'dismiss', title: 'Plus tard' }
+        ]
+      });
+
+      notification.onclick = () => {
+        window.focus();
+        notification.close();
+      };
+
+      setTestResult('✅ Rappel d\'allaitement envoyé !');
+    } catch (error) {
+      setTestResult(`❌ Erreur: ${error.message}`);
+    }
+  };
+
+  const sendDiaperReminder = () => {
+    if (permission !== 'granted') {
+      setTestResult('❌ Vous devez d\'abord autoriser les notifications');
+      return;
+    }
+
+    try {
+      const notification = new Notification('💩 Changement de couche', {
+        body: 'N\'oubliez pas de changer la couche de bébé !',
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: 'diaper-reminder',
+        vibrate: [100, 50, 100],
+        timestamp: Date.now()
+      });
+
+      notification.onclick = () => {
+        window.focus();
+        notification.close();
+      };
+
+      setTestResult('✅ Rappel de couche envoyé !');
+    } catch (error) {
+      setTestResult(`❌ Erreur: ${error.message}`);
+    }
+  };
+
+  const scheduleDelayedNotification = () => {
+    if (permission !== 'granted') {
+      setTestResult('❌ Vous devez d\'abord autoriser les notifications');
+      return;
+    }
+
+    setTestResult('⏳ Notification programmée dans 5 secondes...');
+
+    setTimeout(() => {
+      try {
+        const notification = new Notification('⏰ Notification programmée', {
+          body: 'Cette notification a été programmée il y a 5 secondes !',
+          icon: '/pwa-192x192.png',
+          tag: 'scheduled-notification'
+        });
+
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
+
+        setTestResult('✅ Notification programmée déclenchée !');
+      } catch (error) {
+        setTestResult(`❌ Erreur: ${error.message}`);
+      }
+    }, 5000);
+  };
+
+  const getPermissionStatus = () => {
+    switch (permission) {
+      case 'granted':
+        return { text: 'Autorisées ✅', color: '#10b981' };
+      case 'denied':
+        return { text: 'Refusées ❌', color: '#ef4444' };
+      default:
+        return { text: 'Non demandées ⚠️', color: '#f59e0b' };
+    }
+  };
+
+  const status = getPermissionStatus();
+
+  return (
+    <div className="notification-test">
+      <h2>🔔 Test des Notifications</h2>
+
+      <div className="permission-status" style={{ borderColor: status.color }}>
+        <div className="status-label">Statut des permissions :</div>
+        <div className="status-value" style={{ color: status.color }}>
+          {status.text}
+        </div>
+      </div>
+
+      {permission !== 'granted' && (
+        <div className="permission-section">
+          <button onClick={requestPermission} className="btn-permission">
+            🔓 Demander la permission
+          </button>
+        </div>
+      )}
+
+      {permission === 'granted' && (
+        <>
+          <div className="test-section">
+            <h3>Tests basiques</h3>
+            <div className="test-buttons">
+              <button onClick={sendTestNotification} className="btn-test">
+                🧪 Notification simple
+              </button>
+              <button onClick={scheduleDelayedNotification} className="btn-test">
+                ⏰ Notification dans 5s
+              </button>
+            </div>
+          </div>
+
+          <div className="test-section">
+            <h3>Simulations réelles</h3>
+            <div className="test-buttons">
+              <button onClick={sendFeedingReminder} className="btn-test primary">
+                🍼 Rappel d'allaitement
+              </button>
+              <button onClick={sendDiaperReminder} className="btn-test secondary">
+                💩 Rappel de couche
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {testResult && (
+        <div className="test-result">
+          {testResult}
+        </div>
+      )}
+
+      <div className="info-section">
+        <h3>ℹ️ Informations</h3>
+        <ul>
+          <li>
+            <strong>Navigateur supporté :</strong>{' '}
+            {('Notification' in window) ? '✅ Oui' : '❌ Non'}
+          </li>
+          <li>
+            <strong>Service Worker :</strong>{' '}
+            {('serviceWorker' in navigator) ? '✅ Disponible' : '❌ Non disponible'}
+          </li>
+          <li>
+            <strong>Permission actuelle :</strong> {permission}
+          </li>
+        </ul>
+      </div>
+
+      <div className="instructions">
+        <h3>📋 Instructions</h3>
+        <ol>
+          <li>Cliquez sur "Demander la permission" pour autoriser les notifications</li>
+          <li>Testez les différents types de notifications</li>
+          <li>Vérifiez que vous recevez bien les notifications</li>
+          <li>Sur mobile : vérifiez que l'app vibre</li>
+        </ol>
+      </div>
+    </div>
+  );
+};
+
+export default NotificationTest;

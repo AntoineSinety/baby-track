@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
 import InviteLink from './InviteLink';
+import NotificationTest from './NotificationTest';
 import './Settings.css';
 
 const Settings = ({ onLogout }) => {
@@ -127,6 +128,10 @@ const Settings = ({ onLogout }) => {
             <span className="toggle-slider"></span>
           </label>
         </div>
+      </div>
+
+      <div className="settings-section">
+        <NotificationTest />
       </div>
 
       <div className="settings-section">

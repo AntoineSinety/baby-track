@@ -11,7 +11,8 @@
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
       "Bash(npm install:*)",
-      "Bash(firebase:*)"
+      "Bash(firebase:*)",
+      "Bash(npm run dev:host:*)"
     ],
     "deny": [],
     "ask": []
