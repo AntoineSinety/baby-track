@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { formatDistanceToNow, addHours, differenceInSeconds } from 'date-fns';
+import { formatDistanceToNow, addHours, differenceInSeconds, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import './FeedingTimer.css';
 
@@ -64,6 +64,45 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
   const time = formatTime(timeRemaining || 0);
   const isOverdue = timeRemaining !== null && timeRemaining <= 0;
 
+  const openAlarmApp = () => {
+    if (!nextFeedingTime) return;
+
+    const hours = nextFeedingTime.getHours();
+    const minutes = nextFeedingTime.getMinutes();
+
+    // Détecter la plateforme
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    try {
+      if (isAndroid) {
+        // Android : utiliser l'intent pour créer une alarme
+        const alarmIntent = `intent://android.intent.action.SET_ALARM?` +
+          `extra.hour=${hours}&` +
+          `extra.minutes=${minutes}&` +
+          `extra.message=${encodeURIComponent('Allaitement de bébé')}&` +
+          `extra.skip_ui=false#Intent;` +
+          `scheme=android.intent.action.SET_ALARM;` +
+          `end`;
+
+        window.location.href = alarmIntent;
+      } else if (isIOS) {
+        // iOS : ouvrir l'app Horloge (pas de pré-programmation possible)
+        window.location.href = 'clock-alarm://';
+        // Fallback si clock-alarm ne fonctionne pas
+        setTimeout(() => {
+          alert(`Veuillez créer une alarme pour ${format(nextFeedingTime, 'HH:mm', { locale: fr })} dans l'application Horloge`);
+        }, 500);
+      } else {
+        // Desktop ou autre : afficher l'heure
+        alert(`Programmez une alarme pour ${format(nextFeedingTime, 'HH:mm', { locale: fr })}`);
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'ouverture de l\'alarme:', error);
+      alert(`Programmez une alarme pour ${format(nextFeedingTime, 'HH:mm', { locale: fr })}`);
+    }
+  };
+
   return (
     <div className={`feeding-timer ${getStatusClass()}`}>
       <div className="timer-header">
@@ -80,28 +119,41 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
       </div>
 
       {lastFeeding && timeRemaining !== null && (
-        <div className="timer-display">
-          {!isOverdue ? (
-            <>
-              <div className="time-unit">
-                <div className="time-value">{String(time.hours).padStart(2, '0')}</div>
-                <div className="time-label">heures</div>
-              </div>
-              <div className="time-separator">:</div>
-              <div className="time-unit">
-                <div className="time-value">{String(time.minutes).padStart(2, '0')}</div>
-                <div className="time-label">minutes</div>
-              </div>
-              <div className="time-separator">:</div>
-              <div className="time-unit">
-                <div className="time-value">{String(time.seconds).padStart(2, '0')}</div>
-                <div className="time-label">secondes</div>
-              </div>
-            </>
-          ) : (
-            <div className="overdue-icon">⏰</div>
+        <>
+          <div className="timer-display">
+            {!isOverdue ? (
+              <>
+                <div className="time-unit">
+                  <div className="time-value">{String(time.hours).padStart(2, '0')}</div>
+                  <div className="time-label">heures</div>
+                </div>
+                <div className="time-separator">:</div>
+                <div className="time-unit">
+                  <div className="time-value">{String(time.minutes).padStart(2, '0')}</div>
+                  <div className="time-label">minutes</div>
+                </div>
+                <div className="time-separator">:</div>
+                <div className="time-unit">
+                  <div className="time-value">{String(time.seconds).padStart(2, '0')}</div>
+                  <div className="time-label">secondes</div>
+                </div>
+              </>
+            ) : (
+              <div className="overdue-icon">⏰</div>
+            )}
+          </div>
+
+          {nextFeedingTime && !isOverdue && (
+            <div className="next-feeding-time">
+              <p className="exact-time">
+                Prochain allaitement prévu à <strong>{format(nextFeedingTime, 'HH:mm', { locale: fr })}</strong>
+              </p>
+              <button onClick={openAlarmApp} className="alarm-button">
+                📱 Programmer un réveil
+              </button>
+            </div>
           )}
-        </div>
+        </>
       )}
 
       {!lastFeeding && (
