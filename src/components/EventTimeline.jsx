@@ -1,5 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { format, isToday, isYesterday, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useBaby } from '../context/BabyContext';
 import { deleteEvent } from '../firebase/firestore';
@@ -8,6 +8,31 @@ import './EventTimeline.css';
 const EventTimeline = ({ events, limit, onEditEvent }) => {
   const { activeBaby } = useBaby();
   const displayedEvents = limit ? events.slice(0, limit) : events;
+
+  // Grouper les événements par date
+  const groupEventsByDate = (events) => {
+    const groups = {};
+    events.forEach(event => {
+      const eventDate = new Date(event.createdAt);
+      const dateKey = format(eventDate, 'yyyy-MM-dd');
+      if (!groups[dateKey]) {
+        groups[dateKey] = {
+          date: eventDate,
+          events: []
+        };
+      }
+      groups[dateKey].events.push(event);
+    });
+    return Object.values(groups);
+  };
+
+  const getDateLabel = (date) => {
+    if (isToday(date)) return "Aujourd'hui";
+    if (isYesterday(date)) return 'Hier';
+    return format(date, 'EEEE d MMMM', { locale: fr });
+  };
+
+  const groupedEvents = groupEventsByDate(displayedEvents);
 
   const handleDelete = async (eventId) => {
     if (!activeBaby) return;
@@ -65,52 +90,66 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
 
   return (
     <div className="event-timeline">
-      {displayedEvents.map((event, index) => (
-        <div key={event.id} className={`timeline-item ${event.type}`}>
-          <div className="timeline-time">
-            {format(new Date(event.createdAt), 'HH:mm', { locale: fr })}
+      {groupedEvents.map((group, groupIndex) => (
+        <div key={group.date.toISOString()} className="timeline-group">
+          <div className="timeline-date-header">
+            <div className="timeline-date-label">{getDateLabel(group.date)}</div>
+            <div className="timeline-date-line"></div>
           </div>
 
-          <div className="timeline-marker">
-            <div className="timeline-dot"></div>
-            {index < displayedEvents.length - 1 && <div className="timeline-line"></div>}
-          </div>
-
-          <div className="timeline-content">
-            <div className="timeline-card">
-              <div className="timeline-header">
-                <div className="timeline-icon">{getEventIcon(event)}</div>
-                <div className="timeline-info">
-                  <div className="timeline-title">{getEventTitle(event)}</div>
-                  {getEventDetails(event) && (
-                    <div className="timeline-details">{getEventDetails(event)}</div>
-                  )}
-                </div>
-                <div className="timeline-actions">
-                  {onEditEvent && event.type === 'feeding' && (
-                    <button
-                      className="timeline-edit"
-                      onClick={() => onEditEvent(event)}
-                      title="Modifier"
-                    >
-                      ✏️
-                    </button>
-                  )}
-                  <button
-                    className="timeline-delete"
-                    onClick={() => handleDelete(event.id)}
-                    title="Supprimer"
-                  >
-                    ✕
-                  </button>
-                </div>
+          {group.events.map((event, index) => (
+            <div key={event.id} className={`timeline-item ${event.type}`}>
+              <div className="timeline-time">
+                {format(new Date(event.createdAt), 'HH:mm', { locale: fr })}
               </div>
 
-              {event.notes && (
-                <div className="timeline-notes">{event.notes}</div>
-              )}
+              <div className="timeline-marker">
+                <div className="timeline-dot"></div>
+                {(index < group.events.length - 1 || groupIndex < groupedEvents.length - 1) && (
+                  <div className="timeline-line"></div>
+                )}
+              </div>
+
+              <div className="timeline-content">
+                <div className="timeline-card">
+                  <div className="timeline-header">
+                    <div className="timeline-icon">{getEventIcon(event)}</div>
+                    <div className="timeline-info">
+                      <div className="timeline-title">{getEventTitle(event)}</div>
+                      {getEventDetails(event) && (
+                        <div className="timeline-details">{getEventDetails(event)}</div>
+                      )}
+                    </div>
+                    <div className="timeline-actions">
+                      {onEditEvent && event.type === 'feeding' && (
+                        <button
+                          className="timeline-edit"
+                          onClick={() => onEditEvent(event)}
+                          title="Modifier"
+                        >
+                          ✏️
+                        </button>
+                      )}
+                      <button
+                        className="timeline-delete"
+                        onClick={() => handleDelete(event.id)}
+                        title="Supprimer"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+
+                  {event.notes && (
+                    <div className="timeline-notes">
+                      <div className="timeline-notes-icon">💭</div>
+                      {event.notes}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       ))}
     </div>
