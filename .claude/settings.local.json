@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s)",
+      "Bash(dir:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install)",
+      "Bash(nul)",
+      "Bash(findstr:*)",
+      "Bash(tree:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(firebase:*)",
+      "Bash(npm run dev:host:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(set NODE_ENV=production)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
