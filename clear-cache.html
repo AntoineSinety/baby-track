@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forcer la mise à jour - Baby Track</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0f0f23;
+            color: #e0e0e0;
+        }
+        h1 {
+            color: #3b82f6;
+            text-align: center;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .btn.success {
+            background: #10b981;
+        }
+        .btn.danger {
+            background: #ef4444;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .status {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+        .status.show {
+            display: block;
+        }
+        .emoji {
+            font-size: 2rem;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="emoji">👶</div>
+    <h1>Forcer la mise à jour</h1>
+
+    <div class="info">
+        <strong>⚠️ Problème d'affichage de l'ancienne version ?</strong>
+        <p>Si votre téléphone affiche toujours l'ancienne version de l'application, utilisez les boutons ci-dessous pour forcer la mise à jour.</p>
+    </div>
+
+    <button class="btn" onclick="clearAllCaches()">
+        🗑️ Vider tous les caches
+    </button>
+
+    <button class="btn danger" onclick="unregisterServiceWorkers()">
+        ⚙️ Désinstaller le Service Worker
+    </button>
+
+    <button class="btn success" onclick="clearAndReload()">
+        🔄 Tout nettoyer et recharger
+    </button>
+
+    <div id="status" class="status">
+        <p id="statusText"></p>
+    </div>
+
+    <div class="info">
+        <strong>📱 Instructions manuelles pour téléphone :</strong>
+        <ol>
+            <li>Appuyez sur "Tout nettoyer et recharger"</li>
+            <li>Ensuite, allez dans les paramètres de votre navigateur</li>
+            <li>Cherchez "Baby Track" dans les applications installées</li>
+            <li>Supprimez l'application / les données du site</li>
+            <li>Rechargez la page</li>
+        </ol>
+        <strong>Chrome Android :</strong> Paramètres → Paramètres du site → Afficher les autorisations et les données stockées pour les sites → Baby Track → Effacer et réinitialiser
+        <br><br>
+        <strong>Safari iOS :</strong> Réglages → Safari → Avancé → Données de sites web → Supprimer Baby Track
+    </div>
+
+    <script>
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            statusText.textContent = message;
+            status.classList.add('show');
+        }
+
+        async function clearAllCaches() {
+            try {
+                // Vider tous les caches
+                const cacheNames = await caches.keys();
+                await Promise.all(
+                    cacheNames.map(cacheName => caches.delete(cacheName))
+                );
+                showStatus(`✅ ${cacheNames.length} caches supprimés avec succès !`);
+            } catch (error) {
+                showStatus(`❌ Erreur : ${error.message}`);
+            }
+        }
+
+        async function unregisterServiceWorkers() {
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(
+                    registrations.map(registration => registration.unregister())
+                );
+                showStatus(`✅ ${registrations.length} Service Workers désinstallés !`);
+            } catch (error) {
+                showStatus(`❌ Erreur : ${error.message}`);
+            }
+        }
+
+        async function clearAndReload() {
+            try {
+                // 1. Vider tous les caches
+                const cacheNames = await caches.keys();
+                await Promise.all(
+                    cacheNames.map(cacheName => caches.delete(cacheName))
+                );
+
+                // 2. Désinstaller tous les Service Workers
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(
+                    registrations.map(registration => registration.unregister())
+                );
+
+                // 3. Vider le localStorage et sessionStorage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                showStatus('✅ Tout a été nettoyé ! Redirection dans 2 secondes...');
+
+                // 4. Recharger la page avec un cache bust
+                setTimeout(() => {
+                    window.location.href = '../?v=' + Date.now();
+                }, 2000);
+            } catch (error) {
+                showStatus(`❌ Erreur : ${error.message}`);
+            }
+        }
+
+        // Afficher l'état actuel
+        window.addEventListener('load', async () => {
+            const cacheNames = await caches.keys();
+            const registrations = await navigator.serviceWorker.getRegistrations();
+
+            let info = `ℹ️ État actuel :\n`;
+            info += `- ${cacheNames.length} cache(s) actif(s)\n`;
+            info += `- ${registrations.length} Service Worker(s) actif(s)`;
+
+            showStatus(info);
+        });
+    </script>
+</body>
+</html>
