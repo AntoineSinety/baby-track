@@ -123,7 +123,8 @@ const Charts = ({ events }) => {
       {
         data: [diaperTypeData.peeCount, diaperTypeData.poopCount, diaperTypeData.bothCount],
         backgroundColor: ['#60a5fa', '#f59e0b', '#10b981'],
-        borderWidth: 0,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim(),
+        borderWidth: 3,
       },
     ],
   };
@@ -135,7 +136,8 @@ const Charts = ({ events }) => {
       {
         data: [breastData.leftCount, breastData.rightCount],
         backgroundColor: ['#3b82f6', '#8b5cf6'],
-        borderWidth: 0,
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim(),
+        borderWidth: 3,
       },
     ],
   };
@@ -146,30 +148,37 @@ const Charts = ({ events }) => {
     plugins: {
       legend: {
         labels: {
-          color: 'var(--text-primary)',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim(),
           font: {
             family: 'Inter, system-ui, sans-serif',
           },
         },
+      },
+      tooltip: {
+        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim(),
+        titleColor: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim(),
+        bodyColor: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim(),
+        borderWidth: 1,
       },
     },
     scales: {
       y: {
         beginAtZero: true,
         ticks: {
-          color: 'var(--text-secondary)',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),
           stepSize: 1,
         },
         grid: {
-          color: 'var(--border-color)',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim(),
         },
       },
       x: {
         ticks: {
-          color: 'var(--text-secondary)',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),
         },
         grid: {
-          color: 'var(--border-color)',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim(),
         },
       },
     },
@@ -182,12 +191,19 @@ const Charts = ({ events }) => {
       legend: {
         position: 'bottom',
         labels: {
-          color: 'var(--text-primary)',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim(),
           font: {
             family: 'Inter, system-ui, sans-serif',
           },
           padding: 15,
         },
+      },
+      tooltip: {
+        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim(),
+        titleColor: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim(),
+        bodyColor: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),
+        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim(),
+        borderWidth: 1,
       },
     },
   };
