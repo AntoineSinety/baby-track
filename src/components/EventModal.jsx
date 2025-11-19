@@ -59,7 +59,9 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null }) => {
         <div className="modal-header">
           <h2>
             {editEvent ? '✏️ Modifier ' : ''}
-            {type === 'feeding' ? '🍼 Allaitement' : '👶 Changement de couche'}
+            {type === 'feeding' && '🍼 Allaitement'}
+            {type === 'diaper' && '👶 Changement de couche'}
+            {type === 'bath' && '🛁 Bain'}
           </h2>
           <button className="close-button" onClick={onClose}>✕</button>
         </div>
@@ -186,7 +188,9 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null }) => {
               placeholder={
                 type === 'feeding'
                   ? 'Ex: Bon allaitement, bébé calme...'
-                  : 'Ex: Couche très mouillée, selles normales...'
+                  : type === 'diaper'
+                  ? 'Ex: Couche très mouillée, selles normales...'
+                  : 'Ex: Bain agréable, température de l\'eau...'
               }
               rows="3"
             />

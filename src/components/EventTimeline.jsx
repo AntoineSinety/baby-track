@@ -32,6 +32,14 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
     return format(date, 'EEEE d MMMM', { locale: fr });
   };
 
+  const getEventCountsByType = (events) => {
+    const counts = {};
+    events.forEach(event => {
+      counts[event.type] = (counts[event.type] || 0) + 1;
+    });
+    return counts;
+  };
+
   const groupedEvents = groupEventsByDate(displayedEvents);
 
   const handleDelete = async (eventId) => {
@@ -54,6 +62,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
       if (event.diaperType === 'poop') return '💩';
       return '💧💩';
     }
+    if (event.type === 'bath') return '🛁';
     return '📝';
   };
 
@@ -69,6 +78,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
       if (event.diaperType === 'poop') return 'Couche - Caca';
       return 'Couche - Les deux';
     }
+    if (event.type === 'bath') return 'Bain';
     return 'Événement';
   };
 
@@ -90,10 +100,19 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
 
   return (
     <div className="event-timeline">
-      {groupedEvents.map((group, groupIndex) => (
+      {groupedEvents.map((group, groupIndex) => {
+        const eventCounts = getEventCountsByType(group.events);
+        return (
         <div key={group.date.toISOString()} className="timeline-group">
           <div className="timeline-date-header">
-            <div className="timeline-date-label">{getDateLabel(group.date)}</div>
+            <div className="timeline-date-label">
+              {getDateLabel(group.date)}
+              <span className="timeline-date-counts">
+                {eventCounts.feeding && <span className="count-item feeding">{eventCounts.feeding} 🍼</span>}
+                {eventCounts.diaper && <span className="count-item diaper">{eventCounts.diaper} 👶</span>}
+                {eventCounts.bath && <span className="count-item bath">{eventCounts.bath} 🛁</span>}
+              </span>
+            </div>
             <div className="timeline-date-line"></div>
           </div>
 
@@ -151,7 +170,8 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
             </div>
           ))}
         </div>
-      ))}
+      );
+      })}
     </div>
   );
 };

@@ -43,6 +43,16 @@ const QuickActions = ({ onAddEvent }) => {
             <div className="action-label">Couche</div>
           </button>
         </div>
+
+        <div className="secondary-actions">
+          <button
+            className="secondary-action-button bath"
+            onClick={() => handleQuickAction('bath')}
+          >
+            <span className="secondary-icon">🛁</span>
+            <span className="secondary-label">Bain</span>
+          </button>
+        </div>
       </div>
 
       {showModal && (
