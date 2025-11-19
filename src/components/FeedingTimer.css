@@ -130,6 +130,12 @@
   font-weight: 700;
 }
 
+.next-breast {
+  color: var(--text-primary);
+  font-weight: 600;
+  opacity: 0.9;
+}
+
 @media (max-width: 768px) {
   .feeding-timer {
     padding: 1.5rem;

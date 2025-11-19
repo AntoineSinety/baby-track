@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import EventModal from './EventModal';
 import './QuickActions.css';
 
-const QuickActions = ({ onAddEvent }) => {
+const QuickActions = ({ onAddEvent, lastFeeding }) => {
   const [showModal, setShowModal] = useState(false);
   const [eventType, setEventType] = useState(null);
 
@@ -60,6 +60,7 @@ const QuickActions = ({ onAddEvent }) => {
           type={eventType}
           onSubmit={handleSubmit}
           onClose={handleClose}
+          lastFeeding={lastFeeding}
         />
       )}
     </>

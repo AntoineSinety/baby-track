@@ -61,8 +61,14 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
     return 'normal';
   };
 
+  const getNextBreast = () => {
+    if (!lastFeeding || !lastFeeding.breast) return null;
+    return lastFeeding.breast === 'left' ? 'droit' : 'gauche';
+  };
+
   const time = formatTime(timeRemaining || 0);
   const isOverdue = timeRemaining !== null && timeRemaining <= 0;
+  const nextBreast = getNextBreast();
 
   return (
     <div className={`feeding-timer ${getStatusClass()}`}>
@@ -99,6 +105,7 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
             <div className="next-feeding-time">
               <p className="exact-time">
                 Prochain allaitement prévu à <strong>{format(nextFeedingTime, 'HH:mm', { locale: fr })}</strong>
+                {nextBreast && <span className="next-breast"> • Sein {nextBreast}</span>}
               </p>
             </div>
           )}

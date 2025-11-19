@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EventModal.css';
 
-const EventModal = ({ type, onSubmit, onClose, editEvent = null }) => {
+const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = null }) => {
   const [formData, setFormData] = useState({
     type: type,
     diaperType: 'pee',
@@ -12,7 +12,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null }) => {
     customTime: ''
   });
 
-  // Charger les données si on est en mode édition
+  // Charger les données si on est en mode édition, sinon présélectionner le sein alterné
   useEffect(() => {
     if (editEvent) {
       // Extraire l'heure si l'événement existe
@@ -29,8 +29,12 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null }) => {
         notes: editEvent.notes || '',
         customTime: `${hours}:${minutes}`
       });
+    } else if (type === 'feeding' && lastFeeding && lastFeeding.breast) {
+      // Présélectionner le sein opposé au dernier allaitement
+      const suggestedBreast = lastFeeding.breast === 'left' ? 'right' : 'left';
+      setFormData(prev => ({ ...prev, breast: suggestedBreast }));
     }
-  }, [editEvent]);
+  }, [editEvent, type, lastFeeding]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -15,7 +15,8 @@
       "Bash(npm run dev:host:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(set NODE_ENV=production)"
     ],
     "deny": [],
     "ask": []

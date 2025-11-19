@@ -135,7 +135,7 @@ const Dashboard = () => {
               lastFeeding={getLastFeedingEvent()}
               interval={settings.feedingInterval}
             />
-            <QuickActions onAddEvent={handleAddEvent} />
+            <QuickActions onAddEvent={handleAddEvent} lastFeeding={getLastFeedingEvent()} />
             <div className="section-title">Timeline du jour</div>
             <EventTimeline
               events={events}
