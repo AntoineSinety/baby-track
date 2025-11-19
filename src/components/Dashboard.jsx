@@ -13,7 +13,7 @@ import QuickActions from './QuickActions';
 import EventHistory from './EventHistory';
 import EventTimeline from './EventTimeline';
 import Statistics from './Statistics';
-import FunFeatures from './FunFeatures';
+import TodoList from './TodoList';
 import Settings from './Settings';
 import EventModal from './EventModal';
 import BabySetup from './BabySetup';
@@ -148,8 +148,8 @@ const Dashboard = () => {
         return <EventHistory events={events} showAll onEditEvent={handleEditEvent} />;
       case 'statistics':
         return <Statistics events={events} />;
-      case 'fun':
-        return <FunFeatures events={events} />;
+      case 'todos':
+        return <TodoList />;
       case 'settings':
         return <Settings onLogout={handleLogout} />;
       default:

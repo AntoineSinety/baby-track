@@ -9,7 +9,7 @@ const Header = ({ user, activeView, setActiveView }) => {
     { id: 'home', label: 'Accueil', icon: '🏠' },
     { id: 'history', label: 'Historique', icon: '📋' },
     { id: 'statistics', label: 'Statistiques', icon: '📊' },
-    { id: 'fun', label: 'Fun', icon: '🎮' },
+    { id: 'todos', label: 'To-Do', icon: '📝' },
     { id: 'settings', label: 'Paramètres', icon: '⚙️' }
   ];
 

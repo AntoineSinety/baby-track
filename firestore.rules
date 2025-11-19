@@ -37,6 +37,13 @@ service cloud.firestore {
         allow read, write: if request.auth != null &&
                              isUserMember(get(/databases/$(database)/documents/babies/$(babyId)).data.memberIds);
       }
+
+      // To-Do liste du bébé
+      match /todos/{todoId} {
+        // Les membres du bébé parent peuvent gérer les todos
+        allow read, write: if request.auth != null &&
+                             isUserMember(get(/databases/$(database)/documents/babies/$(babyId)).data.memberIds);
+      }
     }
 
     // Règles pour les paramètres utilisateur (restent par utilisateur)

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   startOfDay,
   startOfWeek,
@@ -7,9 +7,11 @@ import {
   isWithinInterval
 } from 'date-fns';
 import Charts from './Charts';
+import FunFeatures from './FunFeatures';
 import './Statistics.css';
 
 const Statistics = ({ events }) => {
+  const [showFun, setShowFun] = useState(false);
   const stats = useMemo(() => {
     const now = new Date();
     const todayStart = startOfDay(now);
@@ -54,6 +56,17 @@ const Statistics = ({ events }) => {
       </div>
     </div>
   );
+
+  if (showFun) {
+    return (
+      <div className="statistics">
+        <button className="fun-back-button" onClick={() => setShowFun(false)}>
+          ← Retour aux statistiques
+        </button>
+        <FunFeatures events={events} />
+      </div>
+    );
+  }
 
   return (
     <div className="statistics">
@@ -139,6 +152,19 @@ const Statistics = ({ events }) => {
         <section className="stat-section">
           <h3>📈 Graphiques</h3>
           <Charts events={events} />
+        </section>
+      )}
+
+      {events.length > 0 && (
+        <section className="stat-section">
+          <button className="fun-access-button" onClick={() => setShowFun(true)}>
+            <span className="fun-icon">🎮</span>
+            <span className="fun-text">
+              <strong>Statistiques Inutiles mais Fun</strong>
+              <small>Découvrir des infos complètement absurdes</small>
+            </span>
+            <span className="fun-arrow">→</span>
+          </button>
         </section>
       )}
 
