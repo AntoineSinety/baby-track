@@ -17,6 +17,7 @@ export default defineConfig({
         name: 'Baby Track',
         short_name: 'BabyTrack',
         description: 'Application de suivi d\'allaitement et de couches pour bébé',
+        version: '2.0.0',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         display: 'standalone',
