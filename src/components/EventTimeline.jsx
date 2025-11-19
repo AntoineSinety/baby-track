@@ -68,10 +68,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
 
   const getEventTitle = (event) => {
     if (event.type === 'feeding') {
-      let title = 'Allaitement';
-      if (event.breast === 'left') title += ' gauche';
-      if (event.breast === 'right') title += ' droit';
-      return title;
+      return 'Allaitement';
     }
     if (event.type === 'diaper') {
       if (event.diaperType === 'pee') return 'Couche - Pipi';
@@ -82,9 +79,17 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
     return 'Événement';
   };
 
+  const getBreastBadge = (event) => {
+    if (event.type === 'feeding' && event.breast) {
+      if (event.breast === 'left') return '⬅️ Sein gauche';
+      if (event.breast === 'right') return '➡️ Sein droit';
+    }
+    return null;
+  };
+
   const getEventDetails = (event) => {
     if (event.type === 'feeding' && (event.duration || event.customDuration)) {
-      return `Durée : ${event.duration || event.customDuration} min`;
+      return `${event.duration || event.customDuration} min`;
     }
     return null;
   };
@@ -134,7 +139,12 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
                   <div className="timeline-header">
                     <div className="timeline-icon">{getEventIcon(event)}</div>
                     <div className="timeline-info">
-                      <div className="timeline-title">{getEventTitle(event)}</div>
+                      <div className="timeline-title">
+                        {getEventTitle(event)}
+                        {getBreastBadge(event) && (
+                          <span className="timeline-breast-badge">{getBreastBadge(event)}</span>
+                        )}
+                      </div>
                       {getEventDetails(event) && (
                         <div className="timeline-details">{getEventDetails(event)}</div>
                       )}

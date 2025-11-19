@@ -81,14 +81,16 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
                     className={`breast-option ${formData.breast === 'left' ? 'active' : ''}`}
                     onClick={() => handleBreastChange('left')}
                   >
-                    ⬅️ Gauche
+                    <span className="breast-emoji">⬅️</span>
+                    <span className="breast-label">Sein Gauche</span>
                   </button>
                   <button
                     type="button"
                     className={`breast-option ${formData.breast === 'right' ? 'active' : ''}`}
                     onClick={() => handleBreastChange('right')}
                   >
-                    Droit ➡️
+                    <span className="breast-emoji">➡️</span>
+                    <span className="breast-label">Sein Droit</span>
                   </button>
                 </div>
               </div>

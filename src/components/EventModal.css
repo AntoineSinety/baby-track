@@ -101,25 +101,57 @@
   background: var(--bg-secondary);
   border: 2px solid var(--border-color);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   color: var(--text-primary);
   font-weight: 600;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  position: relative;
+}
+
+.breast-option .breast-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.breast-option .breast-label {
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .breast-option:hover {
   background: var(--bg-hover);
   border-color: var(--accent-color);
+  transform: translateY(-2px);
 }
 
 .breast-option.active {
-  background: var(--accent-color);
-  border-color: var(--accent-color);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #3b82f6;
   color: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.breast-option.active::after {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 /* Duration options for feeding */

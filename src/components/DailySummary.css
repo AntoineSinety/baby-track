@@ -87,8 +87,15 @@
 }
 
 .breast-indicator {
-  color: var(--accent-color);
+  display: inline-block;
+  color: var(--text-primary);
   font-weight: 600;
+  background: var(--bg-secondary);
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-color);
 }
 
 .no-activity {

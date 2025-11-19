@@ -131,9 +131,15 @@
 }
 
 .next-breast {
+  display: inline-block;
   color: var(--text-primary);
   font-weight: 600;
-  opacity: 0.9;
+  background: var(--bg-secondary);
+  padding: 0.3rem 0.625rem;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--border-color);
 }
 
 @media (max-width: 768px) {

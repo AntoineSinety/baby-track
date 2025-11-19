@@ -78,16 +78,17 @@ const DailySummary = ({ events }) => {
         <div className="last-feeding-info">
           <span className="info-icon">🍼</span>
           <span className="info-text">
-            Dernier allaitement{' '}
+            Dernier allaitement
+            {todayStats.lastFeeding.breast && (
+              <span className="breast-indicator">
+                {todayStats.lastFeeding.breast === 'left' ? ' ⬅️ Sein gauche' : ' ➡️ Sein droit'}
+              </span>
+            )}
+            {' '}
             {formatDistanceToNow(new Date(todayStats.lastFeeding.createdAt), {
               addSuffix: true,
               locale: fr
             })}
-            {todayStats.lastFeeding.breast && (
-              <span className="breast-indicator">
-                {' '}• {todayStats.lastFeeding.breast === 'left' ? 'Gauche' : 'Droit'}
-              </span>
-            )}
           </span>
         </div>
       )}
