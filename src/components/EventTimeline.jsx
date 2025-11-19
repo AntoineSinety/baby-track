@@ -121,7 +121,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
                       )}
                     </div>
                     <div className="timeline-actions">
-                      {onEditEvent && event.type === 'feeding' && (
+                      {onEditEvent && (
                         <button
                           className="timeline-edit"
                           onClick={() => onEditEvent(event)}

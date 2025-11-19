@@ -1,8 +1,8 @@
 .event-history {
   background: var(--card-bg);
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--border-color);
 }
 
@@ -10,44 +10,48 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .history-header h3 {
   color: var(--text-primary);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   margin: 0;
   font-weight: 600;
+  letter-spacing: -0.2px;
 }
 
 .filter-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.625rem;
   flex-wrap: wrap;
 }
 
 .filter-btn {
   background: var(--bg-secondary);
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
   cursor: pointer;
   color: var(--text-primary);
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.875rem;
 }
 
 .filter-btn:hover {
   background: var(--bg-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
 }
 
 .filter-btn.active {
-  background: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color) 0%, #2563eb 100%);
   border-color: var(--accent-color);
   color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
 }
 
 .events-list {
@@ -170,12 +174,19 @@
 
 @media (max-width: 768px) {
   .event-history {
-    padding: 1rem;
+    padding: 20px;
+    border-radius: 12px;
   }
 
   .history-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .history-header h3 {
+    font-size: 1.1rem;
   }
 
   .filter-buttons {
@@ -185,6 +196,8 @@
   .filter-btn {
     flex: 1;
     min-width: fit-content;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
   }
 
   .event-item {

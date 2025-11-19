@@ -68,15 +68,6 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
     <div className={`feeding-timer ${getStatusClass()}`}>
       <div className="timer-header">
         <h2>{getStatusMessage()}</h2>
-        {lastFeeding && (
-          <p className="last-feeding-info">
-            Dernier allaitement{' '}
-            {formatDistanceToNow(new Date(lastFeeding.createdAt), {
-              addSuffix: true,
-              locale: fr
-            })}
-          </p>
-        )}
       </div>
 
       {lastFeeding && timeRemaining !== null && (
