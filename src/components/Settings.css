@@ -239,18 +239,48 @@ input:checked + .toggle-slider:before {
   font-weight: 600;
 }
 
+/* Cache Setting */
+.cache-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.clear-cache-button {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.875rem 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.clear-cache-button:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
 @media (max-width: 768px) {
   .settings-section {
     padding: 1rem;
   }
 
   .theme-setting,
-  .notification-setting {
+  .notification-setting,
+  .cache-setting {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .theme-button {
+  .theme-button,
+  .clear-cache-button {
     width: 100%;
   }
 }

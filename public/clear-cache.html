@@ -158,7 +158,7 @@
 
                 // 4. Recharger la page avec un cache bust
                 setTimeout(() => {
-                    window.location.href = '../?v=' + Date.now();
+                    window.location.href = '/baby-track/?v=' + Date.now();
                 }, 2000);
             } catch (error) {
                 showStatus(`❌ Erreur : ${error.message}`);

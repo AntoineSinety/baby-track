@@ -47,6 +47,39 @@ const Settings = ({ onLogout }) => {
     }
   };
 
+  const handleClearCache = async () => {
+    if (!window.confirm('Êtes-vous sûr de vouloir vider le cache et recharger l\'application ? Cela permettra de récupérer la dernière version.')) {
+      return;
+    }
+
+    try {
+      // Vider tous les caches
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+      }
+
+      // Désinstaller les Service Workers
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(registration => registration.unregister()));
+      }
+
+      // Vider le localStorage et sessionStorage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Recharger avec le bon chemin de base
+      const basePath = import.meta.env.MODE === 'production' ? '/baby-track/' : '/';
+      setTimeout(() => {
+        window.location.href = basePath + '?v=' + Date.now();
+      }, 500);
+    } catch (error) {
+      console.error('Erreur lors du nettoyage du cache:', error);
+      alert('Erreur lors du nettoyage du cache');
+    }
+  };
+
   return (
     <div className="settings">
       <InstallPWA />
@@ -138,10 +171,25 @@ const Settings = ({ onLogout }) => {
       </div>
 
       <div className="settings-section">
+        <h3>🔄 Mise à jour</h3>
+        <div className="cache-setting">
+          <div className="setting-info">
+            <div className="setting-label">Forcer la mise à jour</div>
+            <div className="setting-description">
+              Vide le cache et recharge l'application pour récupérer la dernière version
+            </div>
+          </div>
+          <button className="clear-cache-button" onClick={handleClearCache}>
+            🗑️ Vider le cache
+          </button>
+        </div>
+      </div>
+
+      <div className="settings-section">
         <h3>ℹ️ À propos</h3>
         <div className="about-info">
           <p>
-            <strong>Baby Track</strong> v1.0.0
+            <strong>Baby Track</strong> v2.0.0
           </p>
           <p>Application de suivi d'allaitement et de couches</p>
           <p className="sync-info">
