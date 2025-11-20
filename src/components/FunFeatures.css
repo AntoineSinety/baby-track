@@ -54,83 +54,6 @@
   font-style: italic;
 }
 
-/* Mega Counters */
-.fun-mega-counters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-}
-
-.mega-counter {
-  background: var(--card-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 16px;
-  padding: 1.75rem 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.mega-counter::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--accent-color);
-  opacity: 0.8;
-}
-
-.mega-counter.purple::before {
-  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
-}
-
-.mega-counter.pink::before {
-  background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
-}
-
-.mega-counter.cyan::before {
-  background: linear-gradient(90deg, #06b6d4 0%, #22d3ee 100%);
-}
-
-.mega-counter.green::before {
-  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
-}
-
-.mega-counter:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: var(--accent-color);
-}
-
-.mega-counter-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-
-.mega-counter-value {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: var(--accent-color);
-  margin-bottom: 0.5rem;
-}
-
-.mega-counter-label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.mega-counter-sub {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  opacity: 0.9;
-}
-
 /* Fun Section */
 .fun-section {
   background: var(--card-bg);
@@ -148,62 +71,129 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Fun Facts Grid */
-.fun-facts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.fun-fact {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 1.25rem;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.fun-fact:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-color);
-  transform: translateY(-2px);
-}
-
-.fun-fact-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-}
-
-.fun-fact-title {
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
-}
-
-.fun-fact-value {
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.375rem;
-}
-
-.fun-fact-desc {
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-}
-
-/* Absurd Comparisons */
-.absurd-comparisons {
+/* Age Progress */
+.age-progress {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.comparison-item {
+.progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-label {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.progress-value {
+  color: var(--accent-color);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.progress-bar {
+  height: 12px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+  border-radius: 8px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+
+.progress-note {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+/* Main Stats */
+.main-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.main-stat-card {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.main-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent-color);
+  opacity: 0.8;
+}
+
+.main-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--accent-color);
+}
+
+.stat-icon-large {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+
+.stat-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.stat-average {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Age Insights */
+.age-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.insight-item {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -214,140 +204,24 @@
   transition: all 0.3s ease;
 }
 
-.comparison-item:hover {
+.insight-item:hover {
   background: var(--bg-hover);
   border-color: var(--accent-color);
   transform: translateX(4px);
 }
 
-.comparison-emoji {
-  font-size: 2rem;
+.insight-bullet {
+  color: var(--accent-color);
+  font-size: 1.5rem;
+  font-weight: 700;
   flex-shrink: 0;
   line-height: 1;
 }
 
-.comparison-text {
+.insight-text {
   flex: 1;
   color: var(--text-primary);
   font-size: 0.95rem;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.comparison-text strong {
-  color: var(--accent-color);
-  font-weight: 600;
-}
-
-.comparison-note {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-style: italic;
-}
-
-/* Survival Stats */
-.survival-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.survival-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.survival-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.survival-label {
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.survival-value {
-  color: var(--accent-color);
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.survival-bar {
-  height: 12px;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-}
-
-.survival-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
-  border-radius: 8px;
-  transition: width 0.5s ease;
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
-}
-
-.survival-fill.pink {
-  background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
-  box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
-}
-
-.survival-fill.cyan {
-  background: linear-gradient(90deg, #06b6d4 0%, #22d3ee 100%);
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
-}
-
-.survival-note {
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  font-style: italic;
-}
-
-/* Motivation */
-.fun-motivation {
-  text-align: center;
-  padding: 2rem;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(52, 211, 153, 0.1) 100%);
-  border-radius: 16px;
-  border: 2px solid rgba(16, 185, 129, 0.2);
-}
-
-.motivation-icon {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
-}
-
-.fun-motivation h3 {
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem 0;
-}
-
-.fun-motivation p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0;
   line-height: 1.6;
 }
 
@@ -361,26 +235,21 @@
     font-size: 0.9rem;
   }
 
-  .fun-mega-counters {
+  .main-stats {
     grid-template-columns: 1fr;
   }
 
-  .mega-counter-value {
+  .stat-number {
     font-size: 2rem;
   }
 
-  .fun-facts-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .comparison-item {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .survival-header {
+  .progress-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
+  }
+
+  .insight-item {
+    flex-direction: row;
   }
 }

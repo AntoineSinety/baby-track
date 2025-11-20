@@ -125,6 +125,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
                 {eventCounts.feeding && <span className="count-item feeding">{eventCounts.feeding} 🍼</span>}
                 {eventCounts.diaper && <span className="count-item diaper">{eventCounts.diaper} 👶</span>}
                 {eventCounts.bath && <span className="count-item bath">{eventCounts.bath} 🛁</span>}
+                {eventCounts.care && <span className="count-item care">{eventCounts.care} 💊</span>}
               </span>
             </div>
             <div className="timeline-date-line"></div>

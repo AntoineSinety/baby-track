@@ -145,6 +145,18 @@ const Statistics = ({ events }) => {
             value={stats.week.poop}
             color="orange"
           />
+          <StatCard
+            title="Bains"
+            icon="🛁"
+            value={stats.week.baths}
+            color="blue"
+          />
+          <StatCard
+            title="Soins"
+            icon="💊"
+            value={stats.week.care}
+            color="green"
+          />
         </div>
       </section>
 
@@ -161,6 +173,18 @@ const Statistics = ({ events }) => {
             title="Couches"
             icon="👶"
             value={stats.total.diapers}
+            color="green"
+          />
+          <StatCard
+            title="Bains"
+            icon="🛁"
+            value={stats.total.baths}
+            color="blue"
+          />
+          <StatCard
+            title="Soins"
+            icon="💊"
+            value={stats.total.care}
             color="green"
           />
         </div>

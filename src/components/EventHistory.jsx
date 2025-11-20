@@ -40,6 +40,12 @@ const EventHistory = ({ events, showAll = false, onEditEvent }) => {
             >
               🛁 Bains
             </button>
+            <button
+              className={`filter-btn ${filter === 'care' ? 'active' : ''}`}
+              onClick={() => setFilter('care')}
+            >
+              💊 Soins
+            </button>
           </div>
         )}
       </div>
