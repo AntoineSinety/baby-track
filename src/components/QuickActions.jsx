@@ -52,6 +52,14 @@ const QuickActions = ({ onAddEvent, lastFeeding }) => {
             <span className="secondary-icon">🛁</span>
             <span className="secondary-label">Bain</span>
           </button>
+
+          <button
+            className="secondary-action-button care"
+            onClick={() => handleQuickAction('care')}
+          >
+            <span className="secondary-icon">💊</span>
+            <span className="secondary-label">Soins</span>
+          </button>
         </div>
       </div>
 

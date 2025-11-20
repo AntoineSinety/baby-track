@@ -33,16 +33,22 @@ const Statistics = ({ events }) => {
         diapers: todayEvents.filter(e => e.type === 'diaper').length,
         pee: todayEvents.filter(e => e.type === 'diaper' && (e.diaperType === 'pee' || e.diaperType === 'both')).length,
         poop: todayEvents.filter(e => e.type === 'diaper' && (e.diaperType === 'poop' || e.diaperType === 'both')).length,
+        baths: todayEvents.filter(e => e.type === 'bath').length,
+        care: todayEvents.filter(e => e.type === 'care').length,
       },
       week: {
         feedings: weekEvents.filter(e => e.type === 'feeding').length,
         diapers: weekEvents.filter(e => e.type === 'diaper').length,
         pee: weekEvents.filter(e => e.type === 'diaper' && (e.diaperType === 'pee' || e.diaperType === 'both')).length,
         poop: weekEvents.filter(e => e.type === 'diaper' && (e.diaperType === 'poop' || e.diaperType === 'both')).length,
+        baths: weekEvents.filter(e => e.type === 'bath').length,
+        care: weekEvents.filter(e => e.type === 'care').length,
       },
       total: {
         feedings: events.filter(e => e.type === 'feeding').length,
         diapers: events.filter(e => e.type === 'diaper').length,
+        baths: events.filter(e => e.type === 'bath').length,
+        care: events.filter(e => e.type === 'care').length,
       }
     };
   }, [events]);
@@ -96,6 +102,18 @@ const Statistics = ({ events }) => {
             icon="💩"
             value={stats.today.poop}
             color="orange"
+          />
+          <StatCard
+            title="Bains"
+            icon="🛁"
+            value={stats.today.baths}
+            color="blue"
+          />
+          <StatCard
+            title="Soins"
+            icon="💊"
+            value={stats.today.care}
+            color="green"
           />
         </div>
       </section>

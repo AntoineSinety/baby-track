@@ -63,6 +63,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
       return '💧💩';
     }
     if (event.type === 'bath') return '🛁';
+    if (event.type === 'care') return '💊';
     return '📝';
   };
 
@@ -76,6 +77,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
       return 'Couche - Les deux';
     }
     if (event.type === 'bath') return 'Bain';
+    if (event.type === 'care') return 'Soins';
     return 'Événement';
   };
 
@@ -90,6 +92,13 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
   const getEventDetails = (event) => {
     if (event.type === 'feeding' && (event.duration || event.customDuration)) {
       return `${event.duration || event.customDuration} min`;
+    }
+    if (event.type === 'care' && event.careItems) {
+      const items = [];
+      if (event.careItems.eyes) items.push('👁️ Yeux');
+      if (event.careItems.nose) items.push('👃 Nez');
+      if (event.careItems.vitaminD) items.push('💊 Vitamine D');
+      return items.length > 0 ? items.join(' • ') : null;
     }
     return null;
   };

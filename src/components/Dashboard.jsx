@@ -139,7 +139,7 @@ const Dashboard = () => {
             <div className="section-title">Timeline du jour</div>
             <EventTimeline
               events={events}
-              limit={10}
+              limit={15}
               onEditEvent={handleEditEvent}
             />
           </>

@@ -9,7 +9,12 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
     duration: null,
     customDuration: '',
     notes: '',
-    customTime: ''
+    customTime: '',
+    careItems: {
+      eyes: false,
+      nose: false,
+      vitaminD: false
+    }
   });
 
   // Charger les données si on est en mode édition, sinon présélectionner le sein alterné
@@ -27,7 +32,12 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
         duration: editEvent.duration || null,
         customDuration: editEvent.customDuration || '',
         notes: editEvent.notes || '',
-        customTime: `${hours}:${minutes}`
+        customTime: `${hours}:${minutes}`,
+        careItems: editEvent.careItems || {
+          eyes: false,
+          nose: false,
+          vitaminD: false
+        }
       });
     } else if (type === 'feeding' && lastFeeding && lastFeeding.breast) {
       // Présélectionner le sein opposé au dernier allaitement
@@ -57,6 +67,16 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
     setFormData({ ...formData, breast });
   };
 
+  const handleCareItemToggle = (item) => {
+    setFormData({
+      ...formData,
+      careItems: {
+        ...formData.careItems,
+        [item]: !formData.careItems[item]
+      }
+    });
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -66,6 +86,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
             {type === 'feeding' && '🍼 Allaitement'}
             {type === 'diaper' && '👶 Changement de couche'}
             {type === 'bath' && '🛁 Bain'}
+            {type === 'care' && '💊 Soins du jour'}
           </h2>
           <button className="close-button" onClick={onClose}>✕</button>
         </div>
@@ -171,6 +192,41 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
             </div>
           )}
 
+          {type === 'care' && (
+            <div className="form-group">
+              <label>Soins effectués</label>
+              <div className="care-items">
+                <button
+                  type="button"
+                  className={`care-item ${formData.careItems.eyes ? 'active' : ''}`}
+                  onClick={() => handleCareItemToggle('eyes')}
+                >
+                  <span className="care-icon">👁️</span>
+                  <span className="care-label">Yeux</span>
+                  {formData.careItems.eyes && <span className="care-check">✓</span>}
+                </button>
+                <button
+                  type="button"
+                  className={`care-item ${formData.careItems.nose ? 'active' : ''}`}
+                  onClick={() => handleCareItemToggle('nose')}
+                >
+                  <span className="care-icon">👃</span>
+                  <span className="care-label">Nez</span>
+                  {formData.careItems.nose && <span className="care-check">✓</span>}
+                </button>
+                <button
+                  type="button"
+                  className={`care-item ${formData.careItems.vitaminD ? 'active' : ''}`}
+                  onClick={() => handleCareItemToggle('vitaminD')}
+                >
+                  <span className="care-icon">💊</span>
+                  <span className="care-label">Vitamine D</span>
+                  {formData.careItems.vitaminD && <span className="care-check">✓</span>}
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="customTime">Heure (optionnel - par défaut maintenant)</label>
             <input
@@ -196,7 +252,9 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
                   ? 'Ex: Bon allaitement, bébé calme...'
                   : type === 'diaper'
                   ? 'Ex: Couche très mouillée, selles normales...'
-                  : 'Ex: Bain agréable, température de l\'eau...'
+                  : type === 'bath'
+                  ? 'Ex: Bain agréable, température de l\'eau...'
+                  : 'Ex: Soins effectués, réactions du bébé...'
               }
               rows="3"
             />
