@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSettings } from '../context/SettingsContext';
+import FeedingTimer from './FeedingTimer';
 import './Header.css';
 
-const Header = ({ user, activeView, setActiveView }) => {
+const Header = ({ user, activeView, setActiveView, events }) => {
   const { settings, toggleTheme } = useSettings();
 
   const navItems = [
@@ -16,32 +17,11 @@ const Header = ({ user, activeView, setActiveView }) => {
   return (
     <header className="header">
       <div className="header-content">
-        <div className="header-left">
-          <h1 className="app-title">
-            <span className="app-icon">👶</span>
-            Baby Track
-          </h1>
-        </div>
-
-        <div className="header-right">
-          <button
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-label="Changer de thème"
-            title={settings.theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
-          >
-            {settings.theme === 'dark' ? '☀️' : '🌙'}
-          </button>
-
-          <div className="user-info">
-            <img
-              src={user.photoURL || '/default-avatar.png'}
-              alt={user.displayName}
-              className="user-avatar"
-            />
-            <span className="user-name">{user.displayName?.split(' ')[0]}</span>
-          </div>
-        </div>
+        <h1 className="app-title">
+          <span className="app-icon">👶</span>
+          Baby Track
+        </h1>
+        <FeedingTimer events={events} compact />
       </div>
 
       <nav className="nav-tabs">

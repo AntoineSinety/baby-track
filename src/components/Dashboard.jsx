@@ -184,7 +184,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <Header user={user} activeView={activeView} setActiveView={setActiveView} />
+      <Header user={user} activeView={activeView} setActiveView={setActiveView} events={events} />
       <main className="dashboard-main">
         {renderView()}
       </main>

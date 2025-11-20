@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow, addHours, differenceInSeconds, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useSettings } from '../context/SettingsContext';
 import './FeedingTimer.css';
 
-const FeedingTimer = ({ lastFeeding, interval }) => {
+const FeedingTimer = ({ events, lastFeeding, interval, compact = false }) => {
+  const { settings } = useSettings();
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [nextFeedingTime, setNextFeedingTime] = useState(null);
 
+  // Trouver le dernier allaitement depuis events si pas fourni
+  const actualLastFeeding = lastFeeding || (events?.find(e => e.type === 'feeding'));
+  const actualInterval = interval || settings.feedingInterval;
+
   useEffect(() => {
-    if (!lastFeeding) {
+    if (!actualLastFeeding) {
       setTimeRemaining(null);
       setNextFeedingTime(null);
       return;
     }
 
-    const lastFeedingDate = new Date(lastFeeding.createdAt);
-    const nextFeeding = addHours(lastFeedingDate, interval);
+    const lastFeedingDate = new Date(actualLastFeeding.createdAt);
+    const nextFeeding = addHours(lastFeedingDate, actualInterval);
     setNextFeedingTime(nextFeeding);
 
     const updateTimer = () => {
@@ -28,7 +34,7 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
     const intervalId = setInterval(updateTimer, 1000);
 
     return () => clearInterval(intervalId);
-  }, [lastFeeding, interval]);
+  }, [actualLastFeeding, actualInterval]);
 
   const formatTime = (seconds) => {
     if (seconds <= 0) return { hours: 0, minutes: 0, seconds: 0 };
@@ -41,7 +47,7 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
   };
 
   const getStatusMessage = () => {
-    if (!lastFeeding) {
+    if (!actualLastFeeding) {
       return 'Aucun allaitement enregistré';
     }
 
@@ -62,9 +68,9 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
   };
 
   const getNextBreast = () => {
-    if (!lastFeeding || !lastFeeding.breast) return null;
-    const emoji = lastFeeding.breast === 'left' ? '➡️' : '⬅️';
-    const label = lastFeeding.breast === 'left' ? 'Sein droit' : 'Sein gauche';
+    if (!actualLastFeeding || !actualLastFeeding.breast) return null;
+    const emoji = actualLastFeeding.breast === 'left' ? '➡️' : '⬅️';
+    const label = actualLastFeeding.breast === 'left' ? 'Sein droit' : 'Sein gauche';
     return `${emoji} ${label}`;
   };
 
@@ -72,13 +78,31 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
   const isOverdue = timeRemaining !== null && timeRemaining <= 0;
   const nextBreast = getNextBreast();
 
+  // Version compacte pour le header
+  if (compact) {
+    if (!actualLastFeeding || timeRemaining === null) return null;
+
+    return (
+      <div className={`feeding-timer-compact ${getStatusClass()}`}>
+        <span className="compact-icon">{isOverdue ? '⚠️' : '⏰'}</span>
+        <span className="compact-time">
+          {!isOverdue ? `${String(time.hours).padStart(2, '0')}:${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}` : 'C\'est l\'heure !'}
+        </span>
+        {nextBreast && !isOverdue && (
+          <span className="compact-breast">{actualLastFeeding.breast === 'left' ? '➡️' : '⬅️'}</span>
+        )}
+      </div>
+    );
+  }
+
+  // Version complète pour le dashboard
   return (
     <div className={`feeding-timer ${getStatusClass()}`}>
       <div className="timer-header">
         <h2>{getStatusMessage()}</h2>
       </div>
 
-      {lastFeeding && timeRemaining !== null && (
+      {actualLastFeeding && timeRemaining !== null && (
         <>
           <div className="timer-display">
             {!isOverdue ? (
@@ -114,7 +138,7 @@ const FeedingTimer = ({ lastFeeding, interval }) => {
         </>
       )}
 
-      {!lastFeeding && (
+      {!actualLastFeeding && (
         <div className="no-feeding-message">
           <div className="no-feeding-icon">🍼</div>
           <p>Commencez par enregistrer votre premier allaitement</p>
