@@ -6,6 +6,10 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
     type: type,
     diaperType: 'pee',
     breast: null,
+    pumpingBreasts: {
+      left: false,
+      right: false
+    },
     duration: null,
     customDuration: '',
     notes: '',
@@ -29,6 +33,10 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
         type: editEvent.type,
         diaperType: editEvent.diaperType || 'pee',
         breast: editEvent.breast || null,
+        pumpingBreasts: editEvent.pumpingBreasts || {
+          left: false,
+          right: false
+        },
         duration: editEvent.duration || null,
         customDuration: editEvent.customDuration || '',
         notes: editEvent.notes || '',
@@ -77,6 +85,16 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
     });
   };
 
+  const handlePumpingBreastToggle = (breast) => {
+    setFormData({
+      ...formData,
+      pumpingBreasts: {
+        ...formData.pumpingBreasts,
+        [breast]: !formData.pumpingBreasts[breast]
+      }
+    });
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -87,6 +105,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
             {type === 'diaper' && '👶 Changement de couche'}
             {type === 'bath' && '🛁 Bain'}
             {type === 'care' && '💊 Soins du jour'}
+            {type === 'pumping' && '🍶 Tirage de lait'}
           </h2>
           <button className="close-button" onClick={onClose}>✕</button>
         </div>
@@ -227,6 +246,32 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
             </div>
           )}
 
+          {type === 'pumping' && (
+            <div className="form-group">
+              <label>Sein(s) tiré(s)</label>
+              <div className="pumping-breasts">
+                <button
+                  type="button"
+                  className={`pumping-breast ${formData.pumpingBreasts.left ? 'active' : ''}`}
+                  onClick={() => handlePumpingBreastToggle('left')}
+                >
+                  <span className="pumping-icon">⬅️</span>
+                  <span className="pumping-label">Sein Gauche</span>
+                  {formData.pumpingBreasts.left && <span className="pumping-check">✓</span>}
+                </button>
+                <button
+                  type="button"
+                  className={`pumping-breast ${formData.pumpingBreasts.right ? 'active' : ''}`}
+                  onClick={() => handlePumpingBreastToggle('right')}
+                >
+                  <span className="pumping-icon">➡️</span>
+                  <span className="pumping-label">Sein Droit</span>
+                  {formData.pumpingBreasts.right && <span className="pumping-check">✓</span>}
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="customTime">Heure (optionnel - par défaut maintenant)</label>
             <input
@@ -254,6 +299,8 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
                   ? 'Ex: Couche très mouillée, selles normales...'
                   : type === 'bath'
                   ? 'Ex: Bain agréable, température de l\'eau...'
+                  : type === 'pumping'
+                  ? 'Ex: Quantité tirée, durée du tirage...'
                   : 'Ex: Soins effectués, réactions du bébé...'
               }
               rows="3"

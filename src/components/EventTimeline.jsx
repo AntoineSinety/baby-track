@@ -57,6 +57,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
 
   const getEventIcon = (event) => {
     if (event.type === 'feeding') return '🍼';
+    if (event.type === 'pumping') return '🍶';
     if (event.type === 'diaper') {
       if (event.diaperType === 'pee') return '💧';
       if (event.diaperType === 'poop') return '💩';
@@ -70,6 +71,9 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
   const getEventTitle = (event) => {
     if (event.type === 'feeding') {
       return 'Allaitement';
+    }
+    if (event.type === 'pumping') {
+      return 'Tirage de lait';
     }
     if (event.type === 'diaper') {
       if (event.diaperType === 'pee') return 'Couche - Pipi';
@@ -92,6 +96,12 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
   const getEventDetails = (event) => {
     if (event.type === 'feeding' && (event.duration || event.customDuration)) {
       return `${event.duration || event.customDuration} min`;
+    }
+    if (event.type === 'pumping' && event.pumpingBreasts) {
+      const breasts = [];
+      if (event.pumpingBreasts.left) breasts.push('⬅️ Gauche');
+      if (event.pumpingBreasts.right) breasts.push('➡️ Droit');
+      return breasts.length > 0 ? breasts.join(' • ') : null;
     }
     if (event.type === 'care' && event.careItems) {
       const items = [];
@@ -123,6 +133,7 @@ const EventTimeline = ({ events, limit, onEditEvent }) => {
               {getDateLabel(group.date)}
               <span className="timeline-date-counts">
                 {eventCounts.feeding && <span className="count-item feeding">{eventCounts.feeding} 🍼</span>}
+                {eventCounts.pumping && <span className="count-item pumping">{eventCounts.pumping} 🍶</span>}
                 {eventCounts.diaper && <span className="count-item diaper">{eventCounts.diaper} 👶</span>}
                 {eventCounts.bath && <span className="count-item bath">{eventCounts.bath} 🛁</span>}
                 {eventCounts.care && <span className="count-item care">{eventCounts.care} 💊</span>}

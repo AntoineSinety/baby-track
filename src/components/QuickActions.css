@@ -39,8 +39,8 @@
 }
 
 .action-button.feeding:hover {
-  border-color: #3b82f6;
-  background: rgba(59, 130, 246, 0.1);
+  border-color: #f472b6;
+  background: rgba(244, 114, 182, 0.1);
 }
 
 .action-button.diaper:hover {
@@ -89,9 +89,19 @@
   transform: translateY(-1px);
 }
 
+.secondary-action-button.pumping:hover {
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.1);
+}
+
 .secondary-action-button.bath:hover {
   border-color: #8b5cf6;
   background: rgba(139, 92, 246, 0.1);
+}
+
+.secondary-action-button.care:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
 }
 
 .secondary-icon {

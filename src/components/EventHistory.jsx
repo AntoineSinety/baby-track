@@ -29,6 +29,12 @@ const EventHistory = ({ events, showAll = false, onEditEvent }) => {
               🍼 Allaitement
             </button>
             <button
+              className={`filter-btn ${filter === 'pumping' ? 'active' : ''}`}
+              onClick={() => setFilter('pumping')}
+            >
+              🍶 Tirage
+            </button>
+            <button
               className={`filter-btn ${filter === 'diaper' ? 'active' : ''}`}
               onClick={() => setFilter('diaper')}
             >

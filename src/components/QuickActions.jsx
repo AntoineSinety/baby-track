@@ -46,6 +46,14 @@ const QuickActions = ({ onAddEvent, lastFeeding }) => {
 
         <div className="secondary-actions">
           <button
+            className="secondary-action-button pumping"
+            onClick={() => handleQuickAction('pumping')}
+          >
+            <span className="secondary-icon">🍶</span>
+            <span className="secondary-label">Tirage</span>
+          </button>
+
+          <button
             className="secondary-action-button bath"
             onClick={() => handleQuickAction('bath')}
           >

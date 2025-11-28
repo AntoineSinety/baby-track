@@ -161,7 +161,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 5px;
   background: var(--border-color);
   transition: all 0.25s ease;
 }
@@ -176,6 +176,14 @@
 
 .timeline-item.bath .timeline-card::before {
   background: linear-gradient(to bottom, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.timeline-item.care .timeline-card::before {
+  background: linear-gradient(to bottom, #ecf65c 0%, #bace0a 100%);
+}
+
+.timeline-item.pumping .timeline-card::before {
+  background: linear-gradient(to bottom, rgb(161, 5, 182) 0%, #8a0273 100%);
 }
 
 .timeline-card:hover {
