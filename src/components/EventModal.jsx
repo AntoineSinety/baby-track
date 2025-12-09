@@ -13,6 +13,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
     duration: null,
     customDuration: '',
     notes: '',
+    customDate: '',
     customTime: '',
     careItems: {
       eyes: false,
@@ -24,8 +25,11 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
   // Charger les données si on est en mode édition, sinon présélectionner le sein alterné
   useEffect(() => {
     if (editEvent) {
-      // Extraire l'heure si l'événement existe
+      // Extraire la date et l'heure si l'événement existe
       const eventTime = editEvent.createdAt ? new Date(editEvent.createdAt) : new Date();
+      const year = eventTime.getFullYear();
+      const month = String(eventTime.getMonth() + 1).padStart(2, '0');
+      const day = String(eventTime.getDate()).padStart(2, '0');
       const hours = String(eventTime.getHours()).padStart(2, '0');
       const minutes = String(eventTime.getMinutes()).padStart(2, '0');
 
@@ -40,6 +44,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
         duration: editEvent.duration || null,
         customDuration: editEvent.customDuration || '',
         notes: editEvent.notes || '',
+        customDate: `${year}-${month}-${day}`,
         customTime: `${hours}:${minutes}`,
         careItems: editEvent.careItems || {
           eyes: false,
@@ -271,6 +276,20 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
               </div>
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="customDate">Date (optionnel - par défaut aujourd'hui)</label>
+            <input
+              type="date"
+              id="customDate"
+              value={formData.customDate}
+              onChange={(e) => setFormData({ ...formData, customDate: e.target.value })}
+              className="custom-date-input"
+            />
+            <div className="time-hint">
+              Laissez vide pour utiliser la date d'aujourd'hui
+            </div>
+          </div>
 
           <div className="form-group">
             <label htmlFor="customTime">Heure (optionnel - par défaut maintenant)</label>

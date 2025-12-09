@@ -217,6 +217,26 @@
 }
 
 /* Custom Time Input */
+.custom-date-input {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.875rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: 600;
+}
+
+.custom-date-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background: var(--card-bg);
+}
+
 .custom-time-input {
   width: 100%;
   background: var(--bg-secondary);

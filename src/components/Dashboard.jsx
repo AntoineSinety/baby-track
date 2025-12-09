@@ -49,20 +49,29 @@ const Dashboard = () => {
         return;
       }
 
-      // Créer une date personnalisée si customTime est fourni
-      let customDate = new Date();
+      // Créer une date personnalisée si customDate et/ou customTime sont fournis
+      let finalDate = new Date();
+
+      // Gérer la date personnalisée
+      if (eventData.customDate) {
+        const [year, month, day] = eventData.customDate.split('-').map(Number);
+        finalDate = new Date(year, month - 1, day);
+      }
+
+      // Gérer l'heure personnalisée
       if (eventData.customTime) {
-        const [hours, minutes] = eventData.customTime.split(':');
-        customDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        const [hours, minutes] = eventData.customTime.split(':').map(Number);
+        finalDate.setHours(hours, minutes, 0, 0);
       }
 
       // Préparer les données de l'événement
       const eventToSave = {
         ...eventData,
-        createdAt: eventData.customTime ? customDate.toISOString() : new Date().toISOString()
+        createdAt: (eventData.customDate || eventData.customTime) ? finalDate.toISOString() : new Date().toISOString()
       };
 
-      // Retirer customTime des données sauvegardées
+      // Retirer customDate et customTime des données sauvegardées
+      delete eventToSave.customDate;
       delete eventToSave.customTime;
 
       // Ajouter l'événement avec les infos de l'utilisateur
@@ -87,18 +96,30 @@ const Dashboard = () => {
         return;
       }
 
-      // Gérer le changement d'heure si customTime est fourni
+      // Gérer le changement de date et/ou d'heure
       let updatedData = { ...eventData };
 
-      if (eventData.customTime) {
+      if (eventData.customDate || eventData.customTime) {
         // Utiliser la date existante ou créer une nouvelle
-        const baseDate = editingEvent.createdAt ? new Date(editingEvent.createdAt) : new Date();
-        const [hours, minutes] = eventData.customTime.split(':');
-        baseDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-        updatedData.createdAt = baseDate.toISOString();
+        let finalDate = editingEvent.createdAt ? new Date(editingEvent.createdAt) : new Date();
+
+        // Gérer la date personnalisée
+        if (eventData.customDate) {
+          const [year, month, day] = eventData.customDate.split('-').map(Number);
+          finalDate = new Date(year, month - 1, day, finalDate.getHours(), finalDate.getMinutes(), 0, 0);
+        }
+
+        // Gérer l'heure personnalisée
+        if (eventData.customTime) {
+          const [hours, minutes] = eventData.customTime.split(':').map(Number);
+          finalDate.setHours(hours, minutes, 0, 0);
+        }
+
+        updatedData.createdAt = finalDate.toISOString();
       }
 
-      // Retirer customTime des données sauvegardées
+      // Retirer customDate et customTime des données sauvegardées
+      delete updatedData.customDate;
       delete updatedData.customTime;
 
       await updateEvent(activeBaby.id, editingEvent.id, updatedData);
