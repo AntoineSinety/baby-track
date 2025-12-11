@@ -10,8 +10,6 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
       left: false,
       right: false
     },
-    duration: null,
-    customDuration: '',
     notes: '',
     customDate: '',
     customTime: '',
@@ -41,8 +39,6 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
           left: false,
           right: false
         },
-        duration: editEvent.duration || null,
-        customDuration: editEvent.customDuration || '',
         notes: editEvent.notes || '',
         customDate: `${year}-${month}-${day}`,
         customTime: `${hours}:${minutes}`,
@@ -66,14 +62,6 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
 
   const handleDiaperTypeChange = (diaperType) => {
     setFormData({ ...formData, diaperType });
-  };
-
-  const handleDurationChange = (duration) => {
-    setFormData({ ...formData, duration, customDuration: '' });
-  };
-
-  const handleCustomDurationChange = (value) => {
-    setFormData({ ...formData, customDuration: value, duration: null });
   };
 
   const handleBreastChange = (breast) => {
@@ -116,6 +104,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
         </div>
 
         <form onSubmit={handleSubmit}>
+          <div className="modal-body">
           {type === 'feeding' && (
             <>
               <div className="form-group">
@@ -138,51 +127,6 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
                     <span className="breast-label">Sein Droit</span>
                   </button>
                 </div>
-              </div>
-
-              <div className="form-group">
-                <label>Durée de l'allaitement (optionnel)</label>
-              <div className="duration-options">
-                <button
-                  type="button"
-                  className={`duration-option ${formData.duration === 5 ? 'active' : ''}`}
-                  onClick={() => handleDurationChange(5)}
-                >
-                  5 min
-                </button>
-                <button
-                  type="button"
-                  className={`duration-option ${formData.duration === 10 ? 'active' : ''}`}
-                  onClick={() => handleDurationChange(10)}
-                >
-                  10 min
-                </button>
-                <button
-                  type="button"
-                  className={`duration-option ${formData.duration === 15 ? 'active' : ''}`}
-                  onClick={() => handleDurationChange(15)}
-                >
-                  15 min
-                </button>
-                <button
-                  type="button"
-                  className={`duration-option ${formData.duration === 20 ? 'active' : ''}`}
-                  onClick={() => handleDurationChange(20)}
-                >
-                  20 min
-                </button>
-              </div>
-              <div className="custom-duration">
-                <input
-                  type="number"
-                  placeholder="Autre durée (min)"
-                  value={formData.customDuration}
-                  onChange={(e) => handleCustomDurationChange(e.target.value)}
-                  min="1"
-                  max="120"
-                  className="custom-duration-input"
-                />
-              </div>
               </div>
             </>
           )}
@@ -324,6 +268,7 @@ const EventModal = ({ type, onSubmit, onClose, editEvent = null, lastFeeding = n
               }
               rows="3"
             />
+          </div>
           </div>
 
           <div className="modal-actions">
